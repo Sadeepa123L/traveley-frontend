@@ -15,3 +15,11 @@ body{
     font-weight: 350;
     font-style: normal;
 }
+::-webkit-scrollbar {
+    display: none;
+}
+
+html {
+    scrollbar-width: none; 
+    -ms-overflow-style: none; 
+}
