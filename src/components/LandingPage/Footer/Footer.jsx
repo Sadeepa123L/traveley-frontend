@@ -1,7 +1,12 @@
 import React from 'react';
 import './Footer.css';
+import { useNavigate } from 'react-router-dom';
+
 
 function Footer() {
+
+const navigate = useNavigate();
+
   return (
     <div className="footer-wrapper">
       <footer className="footer-container">
@@ -20,15 +25,15 @@ function Footer() {
               <h3>Explore</h3>
               <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/about">About Us</a></li>
-                <li><a href="/services">Our Services</a></li>
+                <li><a href="">About Us</a></li>
+                <li><a href="">Our Services</a></li>
               </ul>
             </div>
             <div className="link-column">
               <h3>Get Started</h3>
               <ul>
-                <li><a href="/customer-signup">Become a Traveler</a></li>
-                <li><a href="/agency-signup">Partner with Us</a></li>
+                <li><a href="" onClick={() => navigate('/TravelerSignUp')}>Become a Traveler</a></li>
+                <li><a href="" onClick={() => navigate('/AgencySignUp')}>Partner with Us</a></li>
               </ul>
             </div>
 

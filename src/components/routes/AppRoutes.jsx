@@ -32,7 +32,7 @@ const AppRoutes = () => {
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/Travelersignup" element={<TravelerSignUp />} />
-       <Route path="/Agencysignup" element={<AgencySignUp />} />
+      <Route path="/Agencysignup" element={<AgencySignUp />} />
       
       <Route path="*" element={<h1>404 - Not Found</h1>} />
     </Routes>
