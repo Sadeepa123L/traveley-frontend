@@ -6,6 +6,8 @@ import Home from '../LandingPage/Home/Home';
 import About from '../LandingPage/About/About';
 import Services from '../LandingPage/Services/Services';
 import Login from '../LoginPage/Login';
+import TravelerSignUp from'../SignUpPages/TravelerSignUp/TravelerSignUp';
+import AgencySignUp from '../SignUpPages/AgencySignUp/AgencySignUp'
 
 const AppRoutes = () => {
   return (
@@ -29,6 +31,8 @@ const AppRoutes = () => {
 
       </Route>
       <Route path="/login" element={<Login />} />
+      <Route path="/Travelersignup" element={<TravelerSignUp />} />
+       <Route path="/Agencysignup" element={<AgencySignUp />} />
       
       <Route path="*" element={<h1>404 - Not Found</h1>} />
     </Routes>

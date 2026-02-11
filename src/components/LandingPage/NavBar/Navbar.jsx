@@ -25,8 +25,8 @@ function NavBar() {
                 <div className='dropdown'>
                    <span className="dropdown-btn">Sign Up</span>
                    <div className='dropdown-content'>
-                        <a href='#'>Customer</a>
-                        <a href='#'>Agency</a>
+                        <a href='' onClick={() => navigate('/TravelerSignUp')}>Customer</a>
+                        <a href='' onClick={() => navigate('/AgencySignUp')}>Agency</a>
                    </div>
                 </div>
             </div>
