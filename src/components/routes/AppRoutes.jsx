@@ -2,9 +2,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import MainLayout from '../Layout/MainLayout';
 
-import Home from '../Home/Home';
-import About from '../About/About';
-import Services from '../Services/Services';
+import Home from '../LandingPage/Home/Home';
+import About from '../LandingPage/About/About';
+import Services from '../LandingPage/Services/Services';
 import Login from '../LoginPage/Login';
 
 const AppRoutes = () => {
