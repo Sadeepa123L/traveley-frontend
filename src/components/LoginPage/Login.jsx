@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Login.css';
-import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa'; // User Icon එක ගත්තා
-import { FcGoogle } from 'react-icons/fc'; // Google Original Color Icon
+import { FaUser, FaLock, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FcGoogle } from 'react-icons/fc';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import LoginBg from '../../assets/HomeImg.jpg'; 
 
-const Login = () => {
+function Login () {
   
   const [userType, setUserType] = useState('traveler'); 
   const [showPassword, setShowPassword] = useState(false);
@@ -17,14 +17,11 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      {/* Background Image Overlay */}
       <img src={LoginBg} alt="Background" className="login-bg-img" />
       <div className="login-overlay"></div>
 
-      {/* Main Login Card */}
       <div className="login-card" data-aos="zoom-in">
         
-        {/* Toggle Switch (Traveler / Agency) */}
         <div className="user-toggle">
           <button 
             className={userType === 'traveler' ? 'toggle-btn active' : 'toggle-btn'}
