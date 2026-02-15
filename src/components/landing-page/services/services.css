@@ -1,0 +1,175 @@
+
+.services-page {
+  font-family: 'Manrope', sans-serif;
+  color: #333;
+}
+
+.services-hero {
+  position: relative;
+  height: 60vh;
+
+  width: 95%;        
+  max-width: 1400px;  
+  margin: 20px auto 0; 
+  border-radius: 30px; 
+  overflow: hidden;    
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+}
+
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  filter: brightness(0.5);
+}
+
+.hero-overlay h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.hero-overlay .highlight {
+  color: #d4af37;
+}
+
+.hero-overlay p {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto;
+}
+.services-container {
+  padding: 80px 10%;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  margin-bottom: 50px;
+  color: #8B4513;
+}
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.service-card {
+  background: white;
+  padding: 40px 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+}
+
+.icon-box {
+  font-size: 3rem;
+  color: #8B4513;
+  margin-bottom: 20px;
+}
+
+.service-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #222;
+}
+
+.service-card p {
+  color: #666;
+  line-height: 1.6;
+}
+.agency-cta {
+  background-color: #8B4513;
+  color: white;
+  padding: 80px 20px;
+  text-align: center;
+
+  width: 95%; 
+  max-width: 1400px;
+  margin: 50px auto;
+  border-radius: 30px;
+}
+
+.cta-content h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.cta-content p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.cta-btn {
+  padding: 15px 40px;
+  font-size: 1.1rem;
+  background-color: white;
+  color: #8B4513;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.cta-btn:hover {
+  background-color: #f0f0f0;
+  transform: scale(1.05);
+}
+
+.how-it-works {
+  padding: 80px 10%;
+  text-align: center;
+  background-color: white;
+}
+
+.steps-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.step {
+  flex: 1;
+  min-width: 250px;
+}
+
+.step-number {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #eee;
+  display: block;
+  margin-bottom: -20px;
+}
+
+.step h3 {
+  font-size: 1.8rem;
+  color: #8B4513;
+  margin-bottom: 10px;
+}
+@media (max-width: 768px) {
+  .hero-overlay h1 {
+    font-size: 2.5rem;
+  }
+  
+  .steps-container {
+    flex-direction: column;
+  }
+}
