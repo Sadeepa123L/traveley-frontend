@@ -1,29 +1,19 @@
+
 .traveler-layout {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden; 
-  background-color: #f8f9fa; 
-}
-
-
-.layout-navbar {
-  flex-shrink: 0;
-  width: 100%;
-  z-index: 1000; 
-  background-color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  min-height: 100vh;
+  background-color: #f4f6f9; 
 }
 
 .layout-content {
-  flex: 1;
-  overflow-y: auto; 
-  padding: 30px;
-  position: relative;
+  padding: 30px 40px; 
+}
+.layout-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 @media (max-width: 768px) {
-  .dashboard-content-area {
+  .layout-content {
     padding: 20px;
   }
 }
