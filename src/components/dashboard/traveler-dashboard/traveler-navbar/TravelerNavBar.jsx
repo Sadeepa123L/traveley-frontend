@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaSearch, FaGlobe } from 'react-icons/fa';
 import './TravelerNavBar.css'; 
 
 const TravelerNavBar = () => {
@@ -12,7 +11,7 @@ const TravelerNavBar = () => {
     { name: 'Home', path: '/TravelerHome' }, 
     { name: 'Agencies', path: '/TravelerAgencies' },
     { name: 'Packages', path: '/TravelerPackages' },
-    { name: 'Contact Us', path: '/TravelerBooking' }
+    { name: 'Booking', path: '/TravelerBooking' }
   ];
 
   const movePill = (element) => {
@@ -47,9 +46,6 @@ const TravelerNavBar = () => {
     <nav className="custom-navbar">
       
       <Link to="/TravelerHome" className="navbar-logo">
-        <div className="logo-icon-wrapper">
-          <FaGlobe className="logo-icon" />
-        </div>
         <span className="logo-text">Traveley</span>
       </Link>
       <div className="nav-menu-pill" ref={menuRef} onMouseLeave={handleMouseLeave}>
@@ -69,9 +65,6 @@ const TravelerNavBar = () => {
       </div>
 
       <div className="navbar-actions">
-        <button className="search-btn">
-          <FaSearch />
-        </button>
         <button className="book-now-btn">
           Book Now
         </button>
