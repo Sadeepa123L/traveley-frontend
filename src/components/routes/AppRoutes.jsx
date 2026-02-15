@@ -1,13 +1,21 @@
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import MainLayout from '../Layout/MainLayout';
+import { Routes, Route, Navigate } from 'react-router-dom';
+import MainLayout from '../layout/MainLayout';
 
-import Home from '../LandingPage/Home/Home';
-import About from '../LandingPage/About/About';
-import Services from '../LandingPage/Services/Services';
-import Login from '../LoginPage/Login';
-import TravelerSignUp from'../SignUpPages/TravelerSignUp/TravelerSignUp';
-import AgencySignUp from '../SignUpPages/AgencySignUp/AgencySignUp'
+import Home from '../landing-page/home/Home';
+import About from '../landing-page/about/About';
+import Services from '../landing-page/services/Services';
+
+import Login from '../login-page/Login';
+import TravelerSignUp from'../signup-page/TravelerSignUp/TravelerSignUp';
+import AgencySignUp from '../signup-page/AgencySignUp/AgencySignUp'
+
+import TravelerHome from '../dashboard/traveler-dashboard/traveler-home/TravelerHome'
+import TravelerPackages from '../dashboard/traveler-dashboard/traveler-packages/TravelerPackages'
+import TravelerAgencies from '../dashboard/traveler-dashboard/traveler-agencies/TravelerAgencies'
+import TravelerBooking from '../dashboard/traveler-dashboard/traveler-booking/TravelerBooking'
+import TravelerLayout from '../layout/travelerlayout/layout';
+
 
 const AppRoutes = () => {
   return (
@@ -28,12 +36,21 @@ const AppRoutes = () => {
             </section>
           </>
         } />
-
       </Route>
+
       <Route path="/login" element={<Login />} />
       <Route path="/Travelersignup" element={<TravelerSignUp />} />
       <Route path="/Agencysignup" element={<AgencySignUp />} />
-      
+
+
+      <Route element={<TravelerLayout/>}>
+        <Route path="/TravelerDashBoard" element={<Navigate to="/TravelerHome" />} />
+        <Route path="/TravelerHome" element={<TravelerHome/>} />
+        <Route path="/TravelerPackages" element={<TravelerPackages/>}/>
+        <Route path="/TravelerAgencies" element={<TravelerAgencies/>}/>
+        <Route path="/TravelerBooking" element={<TravelerBooking/>}/>
+      </Route>
+
       <Route path="*" element={<h1>404 - Not Found</h1>} />
     </Routes>
   );
