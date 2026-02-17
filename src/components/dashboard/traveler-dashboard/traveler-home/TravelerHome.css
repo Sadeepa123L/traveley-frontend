@@ -280,3 +280,106 @@
     padding: 30px 20px;
   }
 }
+@media screen and (max-width: 1024px) {
+    .home-hero-section {
+        height: 350px;
+    }
+    .hero-content h1 {
+        font-size: 36px;
+    }
+    .packages-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .ai-planner-banner {
+        padding: 30px 40px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .traveler-home-container {
+        padding: 0 10px;
+    }
+    .home-hero-section {
+        height: 320px;
+        margin-bottom: 40px;
+        border-radius: 15px;
+    }
+    .hero-content {
+        padding: 0 15px;
+    }
+    .hero-content h1 {
+        font-size: 28px;
+    }
+    .hero-content p {
+        font-size: 15px;
+        margin-bottom: 25px;
+    }
+    .hero-search-bar {
+        flex-direction: column;
+        border-radius: 15px;
+        padding: 15px;
+        gap: 15px;
+    }
+    .search-input-group {
+        padding: 10px 15px;
+        width: 100%;
+        background-color: #f9fafb;
+        border-radius: 10px;
+    }
+    .search-input-group input {
+        background-color: transparent;
+    }
+    .hero-search-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+    }
+    .home-section {
+        margin-bottom: 40px;
+    }
+    .section-header h2 {
+        font-size: 24px;
+    }
+    .section-header p {
+        font-size: 14px;
+    }
+    .ai-planner-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+    .banner-content h2 {
+        font-size: 24px;
+    }
+    .banner-content p {
+        font-size: 14px;
+        margin: 0 auto 20px auto;
+    }
+    .ai-plan-btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .home-hero-section {
+        height: 350px;
+    }
+    .hero-content h1 {
+        font-size: 24px;
+    }
+    .hero-content p {
+        font-size: 14px;
+    }
+    .packages-grid {
+        grid-template-columns: 1fr;
+    }
+    .card-image-wrapper {
+        height: 180px;
+    }
+    .banner-content h2 {
+        font-size: 22px;
+    }
+}

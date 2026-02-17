@@ -121,3 +121,56 @@
 .book-now-btn:hover {
   background-color: #c87a2c;
 }
+@media screen and (max-width: 1024px) {
+    .custom-navbar {
+        padding: 15px 20px;
+    }
+    .nav-item {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+    .book-now-btn {
+        padding: 12px 20px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .custom-navbar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    .nav-menu-pill {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        padding: 5px;
+    }
+    .sliding-pill {
+        display: none !important;
+    }
+    .nav-item.active-link {
+        background-color: #ffffff;
+        color: #000000;
+        border-radius: 50px;
+    }
+    .navbar-actions {
+        width: 100%;
+        justify-content: center;
+    }
+    .book-now-btn {
+        width: 100%;
+        max-width: 300px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .logo-text {
+        font-size: 24px;
+    }
+    .nav-item {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}

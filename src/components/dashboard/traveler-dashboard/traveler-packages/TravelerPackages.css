@@ -240,3 +240,90 @@
 .modern-package-card:hover .btn-arrow {
   transform: translateX(5px) rotate(-45deg); 
 }
+@media screen and (max-width: 1024px) {
+    .packages-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .header-text h1 {
+        font-size: 28px;
+    }
+    .pkg-image-wrapper {
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .packages-page-container {
+        padding: 0 10px;
+    }
+    .packages-header {
+        margin-bottom: 30px;
+        align-items: center;
+        text-align: center;
+    }
+    .header-text h1 {
+        font-size: 26px;
+    }
+    .header-text p {
+        font-size: 14px;
+        margin: 0 auto;
+    }
+    .filter-pills {
+        justify-content: center;
+        gap: 8px;
+    }
+    .filter-btn {
+        padding: 8px 18px;
+        font-size: 13px;
+    }
+    .packages-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .pkg-info {
+        padding: 20px;
+    }
+    .pkg-title {
+        font-size: 20px;
+    }
+    .price-amount {
+        font-size: 22px;
+    }
+    .book-modern-btn {
+        padding: 10px 18px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .packages-grid {
+        grid-template-columns: 1fr;
+    }
+    .header-text h1 {
+        font-size: 24px;
+    }
+    .filter-pills {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 5px;
+        flex-wrap: nowrap;
+        width: 100%;
+    }
+    .filter-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    .pkg-image-wrapper {
+        height: 220px;
+    }
+    .pkg-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+    .book-modern-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}

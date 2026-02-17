@@ -3,7 +3,7 @@
 .messages-page-container {
   font-family: 'Poppins', sans-serif;
   width: 100%;
-  height: calc(100vh - 120px); /* උඩ Navbar එකයි යටින් ඉඩයි අතෑරලා තිරය පිරෙන්න ගන්නවා */
+  height: calc(100vh - 120px);
   display: flex;
   justify-content: center;
 }
@@ -19,9 +19,6 @@
   border: 1px solid #f0f0f0;
 }
 
-/* ==================================
-   වම් පැත්ත: Sidebar (Agencies List)
-   ================================== */
 .chat-sidebar {
   width: 350px;
   background-color: #f9fafb;
@@ -84,7 +81,7 @@
 
 .conversation-item.active {
   background-color: #fff;
-  border-left: 4px solid #c87a2c; /* Luxury Brown highlight */
+  border-left: 4px solid #c87a2c;
 }
 
 .avatar-wrapper {
@@ -165,17 +162,13 @@
   border-radius: 10px;
 }
 
-/* ==================================
-   දකුණු පැත්ත: Chat Main Area
-   ================================== */
 .chat-main-area {
   flex: 1;
   display: flex;
   flex-direction: column;
   background-color: #fff;
 }
-
-/* Chat Header */
+/* chat header */
 .chat-header {
   padding: 15px 25px;
   border-bottom: 1px solid #e5e7eb;
@@ -275,11 +268,11 @@
 }
 
 .message-wrapper.sent {
-  justify-content: flex-end; /* Traveler යවපු මැසේජ් දකුණට */
+  justify-content: flex-end;
 }
 
 .message-wrapper.received {
-  justify-content: flex-start; /* Agency එවපු මැසේජ් වමට */
+  justify-content: flex-start;
 }
 
 .message-bubble {
@@ -288,16 +281,14 @@
   position: relative;
 }
 
-/* Agency එක එවපු එකට Styles (වම් පැත්තේ) */
 .received .message-bubble {
   background-color: #f3f4f6;
   color: #111;
-  border-radius: 18px 18px 18px 4px; /* ලස්සනට නවපු කටක් වගේ පේන්න */
+  border-radius: 18px 18px 18px 4px;
 }
 
-/* Traveler යවපු එකට Styles (දකුණු පැත්තේ) */
 .sent .message-bubble {
-  background-color: #c87a2c; /* ඔයාගේ Luxury Brown පාට */
+  background-color: #c87a2c; 
   color: #fff;
   border-radius: 18px 18px 4px 18px;
 }
@@ -361,4 +352,105 @@
 .send-msg-btn:hover {
   background-color: #dba15c;
   transform: scale(1.05);
+}
+@media screen and (max-width: 1024px) {
+    .chat-sidebar {
+        width: 280px;
+    }
+    .message-bubble {
+        max-width: 80%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .messages-page-container {
+        height: calc(100vh - 80px);
+        padding: 0 10px;
+    }
+    .chat-layout {
+        flex-direction: column;
+        border-radius: 15px;
+    }
+    .chat-sidebar {
+        width: 100%;
+        height: auto;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    .sidebar-header {
+        padding: 15px;
+    }
+    .sidebar-header h2 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+    .conversation-list {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+        padding-bottom: 5px;
+    }
+    .conversation-item {
+        flex: 0 0 260px;
+        border-bottom: none;
+        border-right: 1px solid #f0f0f0;
+        padding: 10px 15px;
+    }
+    .chat-main-area {
+        flex: 1;
+        overflow: hidden;
+    }
+    .chat-header {
+        padding: 10px 15px;
+    }
+    .chat-messages {
+        padding: 15px;
+    }
+    .chat-input-area {
+        padding: 15px;
+    }
+    .message-bubble {
+        max-width: 90%;
+        padding: 10px 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .conversation-item {
+        flex: 0 0 220px;
+        padding: 10px;
+    }
+    .avatar-wrapper {
+        width: 40px;
+        height: 40px;
+        margin-right: 10px;
+    }
+    .chat-name-time h4 {
+        font-size: 14px;
+    }
+    .chat-last-msg p {
+        font-size: 12px;
+    }
+    .active-agency-info img {
+        width: 35px;
+        height: 35px;
+    }
+    .active-agency-info h3 {
+        font-size: 14px;
+    }
+    .icon-btn {
+        margin-left: 10px;
+        font-size: 16px;
+    }
+    .chat-input-area {
+        gap: 10px;
+    }
+    .chat-input-area input {
+        padding: 12px 15px;
+    }
+    .send-msg-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
 }

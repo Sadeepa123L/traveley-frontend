@@ -195,3 +195,64 @@
 .agency-card:hover .arrow-icon {
   transform: translateX(5px);
 }
+@media screen and (max-width: 1024px) {
+    .agencies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+    .agencies-header h1 {
+        font-size: 28px;
+    }
+    .agency-image-wrapper {
+        height: 200px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .agencies-page-container {
+        padding: 0 10px;
+    }
+    .agencies-header {
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .agencies-header h1 {
+        font-size: 24px;
+    }
+    .agencies-header p {
+        font-size: 14px;
+        margin: 0 auto;
+    }
+    .agencies-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 20px;
+    }
+    .agency-info {
+        padding: 20px;
+    }
+    .agency-title-row h2 {
+        font-size: 18px;
+    }
+    .agency-image-wrapper {
+        height: 180px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .agencies-grid {
+        grid-template-columns: 1fr;
+    }
+    .agencies-header h1 {
+        font-size: 22px;
+    }
+    .agency-title-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .agency-rating {
+        align-self: flex-start;
+    }
+    .agency-image-wrapper {
+        height: 200px;
+    }
+}
