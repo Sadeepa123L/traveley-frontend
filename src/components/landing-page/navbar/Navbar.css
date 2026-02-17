@@ -109,3 +109,79 @@
     color: white;
     transform: scale(1.05);
 }
+@media screen and (max-width: 1024px) {
+    .Navbar {
+        padding: 30px 5%;
+    }
+    .nav-menu {
+        gap: 30px;
+    }
+    .nav-menu li {
+        margin: 10px 5px;
+        font-size: 18px;
+    }
+    .nav-button {
+        gap: 20px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .Navbar {
+        flex-direction: column;
+        padding: 20px 5%;
+        gap: 20px;
+    }
+    .nav-icon {
+        font-size: 20px;
+    }
+    .nav-menu {
+        gap: 20px;
+        justify-content: center;
+        width: 100%;
+        padding: 0;
+    }
+    .nav-menu li {
+        margin: 0;
+        font-size: 16px;
+    }
+    .nav-button {
+        gap: 15px;
+        width: 100%;
+        justify-content: center;
+    }
+    .log {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+    .dropdown-btn {
+        padding: 8px 20px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .nav-menu {
+        gap: 15px;
+    }
+    .nav-menu li {
+        font-size: 14px;
+    }
+    .nav-button {
+        gap: 10px;
+    }
+    .log {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+    .dropdown-btn {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+    .dropdown .dropdown-content {
+        min-width: 130px;
+    }
+    .dropdown-content a {
+        padding: 10px;
+        font-size: 14px;
+    }
+}

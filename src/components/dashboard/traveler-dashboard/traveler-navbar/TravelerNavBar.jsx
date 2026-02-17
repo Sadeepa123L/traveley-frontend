@@ -11,7 +11,8 @@ const TravelerNavBar = () => {
     { name: 'Home', path: '/TravelerHome' }, 
     { name: 'Agencies', path: '/TravelerAgencies' },
     { name: 'Packages', path: '/TravelerPackages' },
-    { name: 'Booking', path: '/TravelerBooking' }
+    { name: 'Booking', path: '/TravelerBooking' },
+    { name: 'Message', path: '/TravelerMessages'}
   ];
 
   const movePill = (element) => {

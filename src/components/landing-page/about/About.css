@@ -5,7 +5,7 @@
     padding: 50px 8% 80px 8%;
     max-width: 1300px;
     margin: 0 auto;
-}
+}   
 .about-content-one{
     display: flex;
     align-items: flex-start;
@@ -144,4 +144,114 @@
 .feature-items .feature-item{
     font-size: 25px;
     color: #8B4513;
+}
+@media screen and (max-width: 1024px) {
+    .about-container {
+        padding: 50px 5% 80px 5%;
+    }
+    .about-content-one {
+        gap: 30px;
+    }
+    .about-text-side-one {
+        margin-left: 0;
+    }
+    .about-img-side {
+        margin-right: 0;
+    }
+    .about-image {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        aspect-ratio: 4/5;
+    }
+    .about-content-two {
+        width: 90vw;
+        padding: 40px;
+        gap: 30px;
+    }
+    .about-image-two {
+        width: 100%;
+        max-width: 400px;
+        height: auto;
+        aspect-ratio: 4/5;
+    }
+    .about-tittle {
+        font-size: 45px;
+    }
+    .about-text, .stat-label, .feature-items {
+        font-size: 18px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .about-content-one {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .about-text-side-one {
+        text-align: center;
+        align-items: center;
+    }
+    .about-img-side {
+        width: 100%;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    .about-image {
+        max-width: 100%;
+    }
+    .stats-row {
+        justify-content: center;
+        width: 100%;
+    }
+    .stat-box {
+        align-items: center;
+    }
+    .about-content-two {
+        flex-direction: column-reverse;
+        width: 95vw;
+        padding: 30px 20px;
+        margin-top: 60px;
+        border-radius: 30px;
+    }
+    .about-img-side-two {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+        margin-top: 30px;
+    }
+    .about-text-side-two {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .about-features-list {
+        align-items: flex-start;
+        text-align: left;
+    }
+    .brand-name {
+        margin-top: 20px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .about-tittle {
+        font-size: 35px;
+        margin: 20px 0;
+    }
+    .about-text, .stat-label, .feature-items {
+        font-size: 16px;
+    }
+    .stat-number {
+        font-size: 32px;
+    }
+    .stats-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .brand-name-two {
+        font-size: 20px;
+    }
 }
