@@ -17,6 +17,9 @@ import TravelerBooking from '../dashboard/traveler-dashboard/traveler-booking/Tr
 import TravelerMessages from '../dashboard/traveler-dashboard/raveler-messages/TravelerMessages'
 import TravelerLayout from '../layout/travelerlayout/layout';
 
+import AgencyLayout from '../layout/agencylayout/layout'
+import AgencyHome from '../dashboard/agency-dashboard/agency-home/AgencyHome'
+
 
 const AppRoutes = () => {
   return (
@@ -51,6 +54,11 @@ const AppRoutes = () => {
         <Route path="/TravelerAgencies" element={<TravelerAgencies/>}/>
         <Route path="/TravelerBooking" element={<TravelerBooking/>}/>
         <Route path='/TravelerMessages' element={<TravelerMessages/>}/>
+      </Route>
+x 
+      <Route element={<AgencyLayout/>}>
+      <Route path='/AgencyDashBoard' element={<Navigate to ="/AgencyHome"/>}/>
+      <Route path='/AgencyHome' element={<AgencyHome/>}/>
       </Route>
 
       <Route path="*" element={<h1>404 - Not Found</h1>} />
