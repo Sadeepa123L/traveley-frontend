@@ -10,9 +10,9 @@ const AgencyNavBar = () => {
 
   const links = [
     { name: 'Dashboard', path: '/AgencyHome' }, 
-    { name: 'Packages', path: '/AgencyPackages' },
+    { name: 'Packages', path: '/AgencyPackage' },
     { name: 'Bookings', path: '/AgencyBookings' },
-    { name: 'Messages', path: '/AgencyMessages' },
+    { name: 'Messages', path: '/AgencyMessage' },
     { name: 'Settings', path: '/AgencySettings' }
   ];
 

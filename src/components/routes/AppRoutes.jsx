@@ -19,6 +19,10 @@ import TravelerLayout from '../layout/travelerlayout/layout';
 
 import AgencyLayout from '../layout/agencylayout/layout'
 import AgencyHome from '../dashboard/agency-dashboard/agency-home/AgencyHome'
+import AgencyPackage from '../dashboard/agency-dashboard/agency-packages/AgencyPackage'
+import AgencyBookings from '../dashboard/agency-dashboard/agency-bookings/AgencyBookings'
+import AgencyMessage from '../dashboard/agency-dashboard/agency-message/AgencyMessage'
+import AgencySettings from '../dashboard/agency-dashboard/agency-settings/AgencySettings'
 
 
 const AppRoutes = () => {
@@ -59,6 +63,10 @@ x
       <Route element={<AgencyLayout/>}>
       <Route path='/AgencyDashBoard' element={<Navigate to ="/AgencyHome"/>}/>
       <Route path='/AgencyHome' element={<AgencyHome/>}/>
+      <Route path='/AgencyPackage' element={<AgencyPackage/>}/>
+      <Route path='/AgencyBookings' element={<AgencyBookings/>}/>
+      <Route path='/AgencyMessage' element={<AgencyMessage/>}/>
+      <Route path='/AgencySettings' element={<AgencySettings/>}/>
       </Route>
 
       <Route path="*" element={<h1>404 - Not Found</h1>} />
