@@ -49,15 +49,7 @@ const TravelerSignUp = () => {
           <form className="ts-form">
             <div className="ts-input-group">
               <FaUser className="ts-icon" />
-              <input type="text" placeholder="Full Name" required />
-            </div>
-            <div className="ts-input-group">
-              <FaEnvelope className="ts-icon" />
-              <input type="email" placeholder="Email Address" required />
-            </div>
-            <div className="ts-input-group">
-              <FaPhone className="ts-icon" />
-              <input type="tel" placeholder="Mobile Number" required />
+              <input type="text" placeholder="Username or Email Address" required />
             </div>
             <div className="ts-input-group">
               <FaLock className="ts-icon" />
@@ -71,7 +63,7 @@ const TravelerSignUp = () => {
               </span>
             </div>
             <button type="submit" className="ts-submit-btn">
-              Create Account
+              Sign Up
             </button>
           </form>
 
