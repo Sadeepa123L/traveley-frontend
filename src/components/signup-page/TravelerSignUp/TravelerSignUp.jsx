@@ -2,22 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './TravelerSignUp.css';
 import { FcGoogle } from 'react-icons/fc'; 
-import { FaEnvelope, FaUser, FaPhone, FaLock, FaEye, FaEyeSlash, FaGlobe } from 'react-icons/fa';
+import {FaUser, FaLock, FaEye, FaEyeSlash, FaGlobe } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import toast, { Toaster } from 'react-hot-toast';
 
 import SideImg from '../../../assets/BackgroundOne.jpg'; 
 import MainImg from '../../../assets/SignUpImg.jpg'
 
+import { registerTraveler, redirectToGoogle } from '../../../services/travelerService';
+
 const TravelerSignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
+
+   const [username, setUsername] = useState('');
+   const [password, setPassword] = useState ('');
+   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
   }, []);
 
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+
+    try{
+    const result = await registerTraveler(username, password);
+    toast.success(result.message || "Registration Successful!");
+    setUsername('');
+    setPassword('');
+   }catch (err) {
+    toast.error(err.message || "Something went wrong!");
+   }finally{
+    setIsLoading(false);
+   }
+  };
+
+  
+
   return (
+  
     <div className="ts-container">
+
+      <Toaster position="top-right" />
       
       <img src={SideImg} alt="Background" className="ts-bg-img" />
       <div className="ts-overlay"></div>
@@ -46,10 +75,13 @@ const TravelerSignUp = () => {
             <span>or sign up with email</span>
           </div>
 
-          <form className="ts-form">
+          <form className="ts-form" onSubmit={handleSignUp}>
             <div className="ts-input-group">
               <FaUser className="ts-icon" />
-              <input type="text" placeholder="Username or Email Address" required />
+              <input type="text" placeholder="Username or Email Address" required
+               value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              />
             </div>
             <div className="ts-input-group">
               <FaLock className="ts-icon" />
@@ -57,13 +89,15 @@ const TravelerSignUp = () => {
                 type={showPassword ? "text" : "password"} 
                 placeholder="Create Password" 
                 required 
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <span className="ts-eye" onClick={() => setShowPassword(!showPassword)}>
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </span>
             </div>
-            <button type="submit" className="ts-submit-btn">
-              Sign Up
+            <button type="submit" className="ts-submit-btn" disabled={isLoading}>
+              {isLoading ? "Signing up..." : "Sign Up"}
             </button>
           </form>
 
