@@ -1,0 +1,39 @@
+/* --- AdminLayout.css --- */
+
+/* මුළු පිටුවම (Sidebar + Main Content) */
+.admin-layout-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f4f7f6; /* ලස්සන ලා අළු/සුදු පසුබිමක් */
+}
+
+/* දකුණු පැත්තේ ප්‍රධාන කොටස (Navbar + Outlet) */
+.main-content-wrapper {
+  flex: 1; /* ඉතුරු වෙලා තියෙන ඉඩ ඔක්කොම ගන්නවා */
+  margin-left: 280px; /* Sidebar එකේ පළල (280px) අතහැරලා තමයි මේක පටන් ගන්නේ */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Outlet එක ඇතුළට එන දේවල් වලට ඉඩ (Padding) */
+.layout-content {
+  padding: 40px;
+  flex: 1;
+}
+
+/* --- Mobile Responsive --- */
+@media screen and (max-width: 1024px) {
+  .main-content-wrapper {
+      margin-left: 0; /* ෆෝන් එකේදී Sidebar එක හැංගෙන නිසා margin එක 0 කරනවා */
+  }
+  .layout-content {
+      padding: 25px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .layout-content {
+      padding: 20px 15px;
+  }
+}

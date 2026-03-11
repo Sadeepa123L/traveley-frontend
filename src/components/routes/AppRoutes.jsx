@@ -25,6 +25,10 @@ import AgencyMessage from '../dashboard/agency-dashboard/agency-message/AgencyMe
 import AgencySettings from '../dashboard/agency-dashboard/agency-settings/AgencySettings'
 
 
+import AdminLayout from '../layout/adminlayout/layout'
+import AdminHome from '../dashboard/admin-dashboard/admin-home/AdminHome'
+
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -67,6 +71,11 @@ x
       <Route path='/AgencyBookings' element={<AgencyBookings/>}/>
       <Route path='/AgencyMessage' element={<AgencyMessage/>}/>
       <Route path='/AgencySettings' element={<AgencySettings/>}/>
+      </Route>
+
+      <Route element={<AdminLayout/>}>
+        <Route path='/AdminDashBoard' element={<Navigate to = "/AdminHome"/>}/>
+        <Route path='/AdminHome' element={<AdminHome/>}/>
       </Route>
 
       <Route path="*" element={<h1>404 - Not Found</h1>} />
