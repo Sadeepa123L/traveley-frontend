@@ -1,0 +1,142 @@
+/* --- AdminSideBar.css --- */
+
+.admin-sidebar {
+  width: 280px;
+  background-color: #2e1a0b; /* Traveley තද දුඹුරු පාට */
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  z-index: 1000;
+  transition: transform 0.3s ease;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+}
+
+.admin-brand {
+  padding: 30px 25px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #452914; /* ලා දුඹුරු බෝඩරය */
+}
+
+.brand-icon {
+  font-size: 28px;
+  color: #c87a2c; /* රන්වන් පාට */
+}
+
+.admin-brand h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.admin-brand h2 span {
+  color: #c87a2c;
+  font-weight: 400;
+}
+
+.close-sidebar-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: #d1d5db;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: auto;
+}
+
+.admin-nav-menu {
+  padding: 25px 15px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #d1d5db;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+}
+
+.admin-nav-btn:hover {
+  background-color: #452914; /* Hover වෙද්දී ලා දුඹුරු */
+  color: #fff;
+}
+
+.admin-nav-btn.active {
+  background-color: #c87a2c;
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-icon {
+  font-size: 18px;
+}
+
+.admin-logout-wrapper {
+  padding: 20px 15px;
+  border-top: 1px solid #452914;
+}
+
+.admin-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: #fca5a5;
+  padding: 15px 20px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.admin-logout-btn:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.admin-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(46, 26, 11, 0.6);
+  z-index: 999;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+/* --- Mobile Responsive (Sidebar එක ෆෝන් එකේදී හැංගීම) --- */
+@media screen and (max-width: 1024px) {
+  .admin-sidebar {
+      transform: translateX(-100%);
+  }
+  .admin-sidebar.open {
+      transform: translateX(0);
+  }
+  .close-sidebar-btn {
+      display: block;
+  }
+}

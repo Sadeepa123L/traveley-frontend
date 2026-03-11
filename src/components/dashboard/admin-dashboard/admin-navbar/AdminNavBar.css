@@ -1,0 +1,104 @@
+/* --- AdminNavBar.css --- */
+
+.admin-topbar {
+  background-color: #fff;
+  height: 80px;
+  padding: 0 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.mobile-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #2e1a0b; /* තද දුඹුරු */
+  cursor: pointer;
+}
+
+.topbar-left h1 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #2e1a0b;
+  margin: 0;
+}
+
+/* --- Profile Badge Styles --- */
+.admin-profile-badge {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: #fff9f0; /* ලා රන්වන් පසුබිම */
+  padding: 8px 15px 8px 8px;
+  border-radius: 50px;
+  border: 1px solid #fde6c4;
+}
+
+.admin-avatar {
+  width: 40px;
+  height: 40px;
+  background-color: #c87a2c; /* රන්වන් පාට */
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.admin-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2e1a0b;
+}
+
+.admin-role {
+  font-size: 11px;
+  color: #8c6a51; /* ළා දුඹුරු */
+  font-weight: 500;
+}
+
+/* --- Mobile Responsive (ෆෝන් වලදී Navbar එක වෙනස් වීම) --- */
+@media screen and (max-width: 1024px) {
+  .mobile-toggle-btn {
+      display: block;
+  }
+  .admin-topbar {
+      padding: 0 25px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .topbar-left h1 {
+      display: none; /* ෆෝන් එකේදී Control Panel කියන නම හැංගීම */
+  }
+  .admin-profile-badge {
+      background: transparent;
+      border: none;
+      padding: 0;
+  }
+  .admin-info {
+      display: none; /* ෆෝන් එකේදී නම සහ Role එක හැංගීම, Avatar එක විතරක් පෙන්වීම */
+  }
+  .admin-topbar {
+      padding: 0 20px;
+  }
+}
