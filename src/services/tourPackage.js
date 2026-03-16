@@ -66,3 +66,11 @@ export const updatePackage = async (id, formData) => {
         throw new Error("Failed to update package");
     }
  };
+ export const deletePackage = async (id) => {
+        const token = Cookies.get('jwt_token');
+        const response = await axios.delete(`${API_BASE_URL}/delete/${id}`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+
+    });
+     return response.data;
+    }

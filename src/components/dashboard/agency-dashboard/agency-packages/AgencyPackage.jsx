@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaRegClock, FaCamera, FaTimes } from 'react-icons/fa';
 import './AgencyPackage.css';
 
-import {saveTourPackage, getMyPackages, updatePackage} from '../../../../services/tourPackage'
+import {saveTourPackage, getMyPackages, updatePackage, deletePackage} from '../../../../services/tourPackage'
 import toast, { Toaster } from 'react-hot-toast';
 
 const AgencyPackages = () => {
@@ -45,6 +45,20 @@ const AgencyPackages = () => {
     setImagePreview(pkg.imageUrl);
     setIsModalOpen(true);
   }
+
+  //package delete function
+  const handleDeletePackage = async (id) =>{
+    if (window.confirm("Are you sure you want to delete this package? This action cannot be undone.")) {
+    try {
+      await deletePackage(id);
+      toast.success("Package deleted successfully!");
+      
+      fetchPackages(); 
+    } catch (error) {
+      toast.error(error.message || "Failed to delete package");
+    }
+  }
+  };
 
   
   const [newPkg, setNewPkg] = useState({
@@ -158,7 +172,7 @@ const AgencyPackages = () => {
               
               <div className="pkg-actions">
                 <button className="edit-btn" onClick={() => handleUpdatePackage(pkg)}><FaEdit /> Edit</button>
-                <button className="delete-btn"><FaTrash /> Delete</button>
+                <button className="delete-btn" onClick={() => handleDeletePackage(pkg.id)}><FaTrash /> Delete</button>
               </div>
             </div>
           </div>
