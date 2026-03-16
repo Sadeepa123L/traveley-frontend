@@ -1,4 +1,8 @@
+import axios from 'axios';
 import api from './api'
+import Cookies from 'js-cookie';
+
+const API_BASE_URL ='http://localhost:8080/api/v1/agencyProfile';
 
 export const registerAgency = async(username, password) => {
     try{
@@ -15,5 +19,28 @@ export const loginAgency = async(username, password) => {
         return response.data;
     }catch(error){
         throw error.response ? error.response.data : new error("Network Error");
+    }
+};
+
+export const saveOrUpdateAgencyProfile = async (formData) => {
+    try{
+
+        const token = Cookies.get('jwt_token');
+        console.log("Token going to Backend:", token);
+        if (!token) {
+            throw new Error("No authentication token found. Please login again.");
+        }
+
+        const response = await axios.post(`${API_BASE_URL}/save`, formData,{
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        return response.data;
+
+    }catch(error){
+        console.error("Axios Error:", error);
+        const errorMessage = error.response?.data?.error || error.response?.data?.message || error.message || "Failed to save profile.";
+        throw new Error(errorMessage);
     }
 };
