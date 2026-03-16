@@ -2,40 +2,17 @@ import React, { useState, useRef } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaRegClock, FaCamera, FaTimes } from 'react-icons/fa';
 import './AgencyPackage.css';
 
-const AgencyPackages = () => {
-  const [packages, setPackages] = useState([
-    {
-      id: 1,
-      title: "Royal Heritage Tour",
-      location: "Kandy & Nuwara Eliya",
-      duration: "4 Days / 3 Nights",
-      price: "$320",
-      description: "Experience the rich culture and heritage of Sri Lanka.",
-      image: "https://images.unsplash.com/photo-1588598198321-9833be5c66fc?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 2,
-      title: "Ella Adventure Trail",
-      location: "Ella, Badulla",
-      duration: "3 Days / 2 Nights",
-      price: "$180",
-      description: "A thrilling adventure through the hills and tea estates.",
-      image: "https://images.unsplash.com/photo-1566323133860-23a7895e5b32?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 3,
-      title: "Mirissa Beach Stay",
-      location: "Mirissa",
-      duration: "2 Days / 1 Night",
-      price: "$150",
-      description: "Relax on the golden sands of the southern coast.",
-      image: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?auto=format&fit=crop&w=800&q=80"
-    }
-  ]);
+import {saveTourPackage} from '../../../../services/tourPackage'
+import toast, { Toaster } from 'react-hot-toast';
 
+const AgencyPackages = () => {
+
+  //add states
+  const [packages, setPackages] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
+  const [isLoading, setIsLoading] =useState(false);
   
   const [newPkg, setNewPkg] = useState({
     title: '', location: '', duration: '', price: '', description: ''
@@ -59,23 +36,44 @@ const AgencyPackages = () => {
     setNewPkg({ ...newPkg, [e.target.name]: e.target.value });
   };
 
-  const handleSavePackage = (e) => {
+
+  //main function
+  const handleSavePackage = async (e) => {
     e.preventDefault();
-    const newId = packages.length > 0 ? packages[packages.length - 1].id + 1 : 1;
-    const addedPkg = { 
-      id: newId, 
-      ...newPkg, 
-      image: imagePreview || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80" 
-    };
-    setPackages([addedPkg, ...packages]);
+    setIsLoading(true);
+
+    try{
+      const formData = new FormData();
+
+      formData.append(
+        "packageData",
+        new Blob([JSON.stringify(newPkg)], {type: "application/json"})
+      );
+
+      if(selectedPhoto){
+        formData.append("image", selectedPhoto);
+      }
+      const result = await saveTourPackage(formData);
+
+      toast.success(result.message || "Tour Package Saved Successfully!");
+
     setIsModalOpen(false);
-    setNewPkg({ title: '', location: '', duration: '', price: '', description: '' });
+    setNewPkg({ title: '', destination: '', duration: '', price: '', description: '' });
     setImagePreview(null);
     setSelectedPhoto(null);
+
+    }catch(error){
+      console.error("Error saving package:", error);
+      toast.error(error.message || "Failed to save package");
+    }finally{
+      setIsLoading(false);
+    }
   };
+
 
   return (
     <div className="agency-packages-container">
+       <Toaster position="top-right" />
       <div className="packages-header">
         <div className="header-text">
           <h1>Manage Packages</h1>
@@ -95,7 +93,7 @@ const AgencyPackages = () => {
             
             <div className="pkg-content">
               <div className="pkg-loc">
-                <FaMapMarkerAlt className="loc-icon" /> {pkg.location}
+                <FaMapMarkerAlt className="loc-icon" /> {pkg.destination}
               </div>
               <h3 className="pkg-title">{pkg.title}</h3>
               <p className="pkg-description">{pkg.description}</p>
@@ -117,82 +115,71 @@ const AgencyPackages = () => {
         ))}
       </div>
 
-      {isModalOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>Add New Package</h2>
-              <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>
-                <FaTimes />
-              </button>
+{isModalOpen && (
+  <div className="modal-overlay">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h2>Add New Package</h2>
+        <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>
+          <FaTimes />
+        </button>
+      </div>
+      
+      <form className="modal-form" onSubmit={handleSavePackage}>
+        <div className="form-body">
+          <div className="form-group">
+            <label>Package Title</label>
+            <input type="text" name="title" value={newPkg.title} onChange={handleChange} required />
+          </div>
+          
+          <div className="form-row">
+            <div className="form-group">
+              <label>Destination</label>
+              <input type="text" name="destination" value={newPkg.destination} onChange={handleChange} required />
             </div>
-            
-            <form className="modal-form" onSubmit={handleSavePackage}>
-              <div className="form-group">
-                <label>Package Title</label>
-                <input type="text" name="title" value={newPkg.title} onChange={handleChange} required />
-              </div>
-              
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Location</label>
-                  <input type="text" name="location" value={newPkg.location} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                  <label>Duration</label>
-                  <input type="text" name="duration" placeholder="e.g. 3 Days / 2 Nights" value={newPkg.duration} onChange={handleChange} required />
-                </div>
-              </div>
+            <div className="form-group">
+              <label>Duration</label>
+              <input type="text" name="duration" placeholder="e.g. 3 Days" value={newPkg.duration} onChange={handleChange} required />
+            </div>
+          </div>
 
-              <div className="form-group">
-                <label>Price</label>
-                <input type="text" name="price" placeholder="e.g. $250" value={newPkg.price} onChange={handleChange} required />
-              </div>
+          <div className="form-group">
+            <label>Price</label>
+            <input type="text" name="price" placeholder="e.g. $250" value={newPkg.price} onChange={handleChange} required />
+          </div>
 
-              <div className="form-group">
-                <label>Description</label>
-                <textarea rows="3" name="description" value={newPkg.description} onChange={handleChange} required></textarea>
-              </div>
+          <div className="form-group">
+            <label>Description</label>
+            <textarea rows="2" name="description" value={newPkg.description} onChange={handleChange} required></textarea>
+          </div>
 
-              <div className="form-group">
-                <label>Package Image</label>
-                <div className="profile-img-section" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '10px' }}>
-                  <div className="img-circle" style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    {imagePreview ? (
-                      <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <span className="initial" style={{ color: '#aaa' }}>Img</span>
-                    )}
-                    <button 
-                      className="upload-img-btn" 
-                      onClick={handleCameraClick} 
-                      type="button"
-                      style={{ position: 'absolute', bottom: '5px', right: '5px', background: '#fff', border: 'none', borderRadius: '50%', padding: '5px', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
-                    >
-                      <FaCamera color="#555" />
-                    </button>
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      ref={fileInputRef} 
-                      style={{ display: 'none' }} 
-                      onChange={handleImageChange} 
-                    />
-                  </div>
-                  <div className="img-text">
-                    <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>Upload a high-res image.</p>
-                  </div>
-                </div>
+          <div className="form-group">
+            <label>Package Image</label>
+            <div className="img-upload-container">
+              <div className="img-preview-box">
+                {imagePreview ? (
+                  <img src={imagePreview} alt="Preview" />
+                ) : (
+                  <span className="initial">Img</span>
+                )}
+                <button className="cam-btn" onClick={handleCameraClick} type="button">
+                  <FaCamera />
+                </button>
+                <input type="file" accept="image/*" ref={fileInputRef} style={{ display: 'none' }} onChange={handleImageChange} />
               </div>
-
-              <div className="modal-actions">
-                <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
-                <button type="submit" className="save-btn">Save Package</button>
-              </div>
-            </form>
+              <p>Upload a high-res image.</p>
+            </div>
           </div>
         </div>
-      )}
+
+        <div className="modal-actions">
+          <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)} disabled={isLoading}>Cancel</button>
+          <button type="submit" className="save-btn" disabled={isLoading}>{isLoading ? "Saving..." : "Save Package"}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
     </div>
   );
 };
