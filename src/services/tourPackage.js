@@ -27,3 +27,42 @@ export const saveTourPackage = async (formData) => {
         throw new Error(errorMessage);
     }
 };
+
+export const getMyPackages = async ()=>{
+    try{
+        const token = Cookies.get('jwt_token');
+        if(!token) throw new Error("NO token found")
+
+            const reponse = await axios.get(`${API_BASE_URL}/myPackages`,{
+            headers: {
+                'Authorization' : `Bearer ${token}`
+            }
+        });
+        return reponse.data;
+    }catch(error){
+        console.error("Error fetching packages:", error);
+        throw new Error("Failed to fetch packages");
+    }
+};
+
+export const updatePackage = async (id, formData) => {
+    try{
+        const token = Cookies.get('jwt_token');
+        if(!token) throw new Error("NO token found")
+
+            const response = await axios.put(`${API_BASE_URL}/update/${id}`, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response.data;
+    }catch(error){
+        console.error("Error updating package:", error);
+
+        if (error.response && error.response.data && error.response.data.error) {
+            throw new Error(error.response.data.error);
+        }
+        throw new Error("Failed to update package");
+    }
+ };

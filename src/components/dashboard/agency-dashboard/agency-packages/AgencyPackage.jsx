@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaRegClock, FaCamera, FaTimes } from 'react-icons/fa';
 import './AgencyPackage.css';
 
-import {saveTourPackage} from '../../../../services/tourPackage'
+import {saveTourPackage, getMyPackages, updatePackage} from '../../../../services/tourPackage'
 import toast, { Toaster } from 'react-hot-toast';
 
 const AgencyPackages = () => {
@@ -13,6 +13,39 @@ const AgencyPackages = () => {
   const [imagePreview, setImagePreview] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [isLoading, setIsLoading] =useState(false);
+  const [isEditindId, setIsEditingId] = useState(null);
+
+  
+  //Load packages
+  const fetchPackages = async () => {
+      try{
+        const data = await getMyPackages();
+        setPackages(data);
+      }catch(error){
+        toast.error("Could not load packages.")
+      }
+    };
+    
+  useEffect(() => {
+    fetchPackages();
+  },[]);
+
+  //Update packages function
+  const handleUpdatePackage =  (pkg) => {
+    setIsEditingId(pkg.id);
+
+    setNewPkg({
+      title:pkg.title,
+      destination:pkg.destination,
+      duration:pkg.duration,
+      price:pkg.price,
+      description:pkg.description
+    });
+
+    setImagePreview(pkg.imageUrl);
+    setIsModalOpen(true);
+  }
+
   
   const [newPkg, setNewPkg] = useState({
     title: '', location: '', duration: '', price: '', description: ''
@@ -37,7 +70,8 @@ const AgencyPackages = () => {
   };
 
 
-  //main function
+
+  //main function for add package
   const handleSavePackage = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -49,15 +83,23 @@ const AgencyPackages = () => {
         "packageData",
         new Blob([JSON.stringify(newPkg)], {type: "application/json"})
       );
-
       if(selectedPhoto){
         formData.append("image", selectedPhoto);
       }
-      const result = await saveTourPackage(formData);
+      
+      if(isEditindId){
+        await updatePackage(isEditindId, formData);
+        toast.success("Package Updated Successfully!");
+      }else{
+        await saveTourPackage(formData);
+        toast.success("Tour Package Saved Successfully!");
+      }
 
-      toast.success(result.message || "Tour Package Saved Successfully!");
+      //load new packages after saved
+      fetchPackages();
 
     setIsModalOpen(false);
+    setIsEditingId(null);
     setNewPkg({ title: '', destination: '', duration: '', price: '', description: '' });
     setImagePreview(null);
     setSelectedPhoto(null);
@@ -84,11 +126,19 @@ const AgencyPackages = () => {
         </button>
       </div>
 
+      {/* you have not package message */}
+      {packages.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '60px 20px', backgroundColor: '#f9f9f9', borderRadius: '20px', border: '1px dashed #ccc' }}>
+           <h3 style={{ fontSize: '20px', color: '#333', marginBottom: '10px' }}>No Packages Found!</h3>
+           <p style={{ color: '#666', fontSize: '14px' }}>You haven't added any travel packages yet. Click the "Add New Package" button to get started.</p>
+        </div>
+       ) : (
+
       <div className="packages-grid">
         {packages.map(pkg => (
           <div className="agency-pkg-card" key={pkg.id}>
             <div className="pkg-img-wrapper">
-              <img src={pkg.image} alt={pkg.title} className="pkg-img" />
+              <img src={pkg.imageUrl} alt={pkg.title} className="pkg-img" />
             </div>
             
             <div className="pkg-content">
@@ -107,19 +157,20 @@ const AgencyPackages = () => {
               </div>
               
               <div className="pkg-actions">
-                <button className="edit-btn"><FaEdit /> Edit</button>
+                <button className="edit-btn" onClick={() => handleUpdatePackage(pkg)}><FaEdit /> Edit</button>
                 <button className="delete-btn"><FaTrash /> Delete</button>
               </div>
             </div>
           </div>
         ))}
       </div>
+)}
 
 {isModalOpen && (
   <div className="modal-overlay">
     <div className="modal-content">
       <div className="modal-header">
-        <h2>Add New Package</h2>
+        <h2>{isEditindId ? "Edit Package" : "Add New Package"}</h2>
         <button className="close-modal-btn" onClick={() => setIsModalOpen(false)}>
           <FaTimes />
         </button>
@@ -174,11 +225,16 @@ const AgencyPackages = () => {
 
         <div className="modal-actions">
           <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)} disabled={isLoading}>Cancel</button>
-          <button type="submit" className="save-btn" disabled={isLoading}>{isLoading ? "Saving..." : "Save Package"}</button>
-        </div>
-      </form>
-    </div>
-  </div>
+<button type="submit" className="save-btn" disabled={isLoading}>
+  {isLoading 
+    ? (isEditindId ? "Updating..." : "Saving...") 
+    : (isEditindId ? "Update Package" : "Save Package")
+  }
+</button>
+ </div>
+</form>
+ </div>
+ </div>
 )}
     </div>
   );

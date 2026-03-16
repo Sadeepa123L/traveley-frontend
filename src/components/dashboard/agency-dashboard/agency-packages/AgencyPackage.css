@@ -143,11 +143,36 @@
   font-weight: 600;
   cursor: pointer;
   border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
 }
-
-.edit-btn { background: #f3f4f6; }
-.delete-btn { background: #fee2e2; color: #dc2626; }
-
+.edit-btn { 
+  background: #f3f4f6; 
+  color: #333;
+}
+.edit-btn:hover {
+  background: #e5e7eb;
+  color: #111;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+.delete-btn { 
+  background: #fee2e2; 
+  color: #dc2626; 
+}
+.delete-btn:hover {
+  background: #dc2626;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+}
+.edit-btn:active, .delete-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
