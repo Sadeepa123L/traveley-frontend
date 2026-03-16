@@ -26,7 +26,7 @@ export const saveOrUpdateAgencyProfile = async (formData) => {
     try{
 
         const token = Cookies.get('jwt_token');
-        console.log("Token going to Backend:", token);
+    
         if (!token) {
             throw new Error("No authentication token found. Please login again.");
         }
