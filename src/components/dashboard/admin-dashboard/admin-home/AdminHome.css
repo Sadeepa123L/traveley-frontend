@@ -170,3 +170,12 @@
   background-color: #fef9c3;
   color: #854d0e;
 }
+.Confirm-btn {
+  background: #2ecc71;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight:  bold;
+}

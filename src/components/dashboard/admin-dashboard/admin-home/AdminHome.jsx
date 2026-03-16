@@ -3,7 +3,7 @@ import { FaUsers, FaBuilding, FaSuitcaseRolling, FaMoneyBillWave } from 'react-i
 import './AdminHome.css';
 
 import toast, { Toaster } from 'react-hot-toast';
-import {getPendingAgencies} from '../../../../services/adminService'
+import {getPendingAgencies, approveAgencies} from '../../../../services/adminService'
 
 function AdminHome() {
 
@@ -32,6 +32,20 @@ function AdminHome() {
 
     fetchAgencies();
   }, []);
+
+  const handleApprove = async (agencyId) => {
+    try{
+      await approveAgencies(agencyId);
+      toast.success("Agency Approved Successfully!");
+
+      setRecentAgencies((prevAgencies) =>
+      prevAgencies.filter((agency) => agency.id !== agencyId)
+      );
+    }catch(error){
+      toast.error("Failed to approve agency");
+      console.error(error);
+    }
+  };
 
   return (
     <div className="admin-home-container">
@@ -105,6 +119,7 @@ function AdminHome() {
                 <th>Agency Name</th>
                 <th>Registered Date</th>
                 <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -117,6 +132,12 @@ function AdminHome() {
                    <span className={`status-badge ${agency.status ? agency.status.toLowerCase() : ''}`}>
                    {agency.status || 'N/A'}
                    </span>
+                  </td>
+                  <td>
+                    <button className='Confirm-btn' onClick={() => handleApprove(agency.id)}
+                    >
+                      Confirm
+                    </button>
                   </td>
                 </tr>
               ))}
