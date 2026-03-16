@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaRegClock, FaTag, FaTimes } from 'react-icons/fa';
+import React, { useState, useRef } from 'react';
+import { FaPlus, FaEdit, FaTrash, FaMapMarkerAlt, FaRegClock, FaCamera, FaTimes } from 'react-icons/fa';
 import './AgencyPackage.css';
 
 const AgencyPackages = () => {
@@ -10,7 +10,7 @@ const AgencyPackages = () => {
       location: "Kandy & Nuwara Eliya",
       duration: "4 Days / 3 Nights",
       price: "$320",
-      category: "Cultural",
+      description: "Experience the rich culture and heritage of Sri Lanka.",
       image: "https://images.unsplash.com/photo-1588598198321-9833be5c66fc?auto=format&fit=crop&w=800&q=80"
     },
     {
@@ -19,7 +19,7 @@ const AgencyPackages = () => {
       location: "Ella, Badulla",
       duration: "3 Days / 2 Nights",
       price: "$180",
-      category: "Adventure",
+      description: "A thrilling adventure through the hills and tea estates.",
       image: "https://images.unsplash.com/photo-1566323133860-23a7895e5b32?auto=format&fit=crop&w=800&q=80"
     },
     {
@@ -28,15 +28,32 @@ const AgencyPackages = () => {
       location: "Mirissa",
       duration: "2 Days / 1 Night",
       price: "$150",
-      category: "Relaxation",
+      description: "Relax on the golden sands of the southern coast.",
       image: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?auto=format&fit=crop&w=800&q=80"
     }
   ]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null);
+  
   const [newPkg, setNewPkg] = useState({
-    title: '', location: '', duration: '', price: '', category: '', image: ''
+    title: '', location: '', duration: '', price: '', description: ''
   });
+
+  const fileInputRef = useRef(null);
+
+  const handleCameraClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedPhoto(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
 
   const handleChange = (e) => {
     setNewPkg({ ...newPkg, [e.target.name]: e.target.value });
@@ -48,11 +65,13 @@ const AgencyPackages = () => {
     const addedPkg = { 
       id: newId, 
       ...newPkg, 
-      image: newPkg.image || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80" 
+      image: imagePreview || "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80" 
     };
     setPackages([addedPkg, ...packages]);
     setIsModalOpen(false);
-    setNewPkg({ title: '', location: '', duration: '', price: '', category: '', image: '' });
+    setNewPkg({ title: '', location: '', duration: '', price: '', description: '' });
+    setImagePreview(null);
+    setSelectedPhoto(null);
   };
 
   return (
@@ -72,9 +91,6 @@ const AgencyPackages = () => {
           <div className="agency-pkg-card" key={pkg.id}>
             <div className="pkg-img-wrapper">
               <img src={pkg.image} alt={pkg.title} className="pkg-img" />
-              <div className="pkg-category-badge">
-                <FaTag className="badge-icon" /> {pkg.category}
-              </div>
             </div>
             
             <div className="pkg-content">
@@ -82,6 +98,7 @@ const AgencyPackages = () => {
                 <FaMapMarkerAlt className="loc-icon" /> {pkg.location}
               </div>
               <h3 className="pkg-title">{pkg.title}</h3>
+              <p className="pkg-description">{pkg.description}</p>
               <div className="pkg-dur">
                 <FaRegClock className="dur-icon" /> {pkg.duration}
               </div>
@@ -127,27 +144,45 @@ const AgencyPackages = () => {
                 </div>
               </div>
 
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Price</label>
-                  <input type="text" name="price" placeholder="e.g. $250" value={newPkg.price} onChange={handleChange} required />
-                </div>
-                <div className="form-group">
-                  <label>Category</label>
-                  <select name="category" value={newPkg.category} onChange={handleChange} required>
-                    <option value="">Select Category</option>
-                    <option value="Adventure">Adventure</option>
-                    <option value="Cultural">Cultural</option>
-                    <option value="Honeymoon">Honeymoon</option>
-                    <option value="Wildlife">Wildlife</option>
-                    <option value="Relaxation">Relaxation</option>
-                  </select>
-                </div>
+              <div className="form-group">
+                <label>Price</label>
+                <input type="text" name="price" placeholder="e.g. $250" value={newPkg.price} onChange={handleChange} required />
               </div>
 
               <div className="form-group">
-                <label>Image URL</label>
-                <input type="text" name="image" placeholder="Paste image link here..." value={newPkg.image} onChange={handleChange} />
+                <label>Description</label>
+                <textarea rows="3" name="description" value={newPkg.description} onChange={handleChange} required></textarea>
+              </div>
+
+              <div className="form-group">
+                <label>Package Image</label>
+                <div className="profile-img-section" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '10px' }}>
+                  <div className="img-circle" style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '8px', overflow: 'hidden', backgroundColor: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {imagePreview ? (
+                      <img src={imagePreview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                      <span className="initial" style={{ color: '#aaa' }}>Img</span>
+                    )}
+                    <button 
+                      className="upload-img-btn" 
+                      onClick={handleCameraClick} 
+                      type="button"
+                      style={{ position: 'absolute', bottom: '5px', right: '5px', background: '#fff', border: 'none', borderRadius: '50%', padding: '5px', cursor: 'pointer', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}
+                    >
+                      <FaCamera color="#555" />
+                    </button>
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      ref={fileInputRef} 
+                      style={{ display: 'none' }} 
+                      onChange={handleImageChange} 
+                    />
+                  </div>
+                  <div className="img-text">
+                    <p style={{ margin: 0, fontSize: '0.9rem', color: '#666' }}>Upload a high-res image.</p>
+                  </div>
+                </div>
               </div>
 
               <div className="modal-actions">

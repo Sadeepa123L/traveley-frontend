@@ -1,26 +1,74 @@
 import React, { useState, useRef } from 'react';
 import { FaUserTie, FaBuilding, FaLock, FaCamera, FaSave } from 'react-icons/fa';
 import './AgencySettings.css';
+import toast, { Toaster } from 'react-hot-toast';
+
+import {saveOrUpdateAgencyProfile} from '../../../../services/agencyService'
 
 const AgencySettings = () => {
+
   const [activeTab, setActiveTab] = useState('profile');
   const [profileImage, setProfileImage] = useState(null);
+  const [selectedPhoto, setSelectedPhoto] = useState(null); 
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [agencyData, setAgencyData] = useState({
+    agencyName: '',
+    registrationNumber: '',
+    contactNumber: '',
+    address: '',
+    description: ''
+  });
+  
   const fileInputRef = useRef(null);
 
   const handleCameraClick = () => {
     fileInputRef.current.click();
   };
 
-  const handleImageChange = (e) => {
+const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setProfileImage(imageUrl);
+      setSelectedPhoto(file); 
+      setProfileImage(URL.createObjectURL(file)); 
     }
   };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setAgencyData({ ...agencyData, [name]: value });
+  };
+
+  const handleProfileSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append(
+        "agencyData",
+        new Blob([JSON.stringify(agencyData)], { type: "application/json" })
+      );
+
+      if (selectedPhoto) {
+        formData.append("photo", selectedPhoto);
+      }
+
+      const result = await saveOrUpdateAgencyProfile(formData);
+
+      toast.success(result.message || "Agency Profile Saved Successfully! 🚀");
+
+    } catch (error) {
+      console.error(error);
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <div className="agency-settings-container">
+      <Toaster position="top-right" />
+
       <div className="settings-header">
         <h1>Account Settings</h1>
         <p>Manage your agency profile, bank details, and security.</p>
@@ -80,41 +128,37 @@ const AgencySettings = () => {
                 </div>
               </div>
 
-              <form className="settings-form">
+              <form className="settings-form" onSubmit={handleProfileSubmit}>
                 <div className="form-row">
                   <div className="form-group">
                     <label>Agency Name</label>
-                    <input type="text" defaultValue="Serendipity Travels" />
+                    <input type="text" name='agencyName' value={agencyData.agencyName} onChange={handleInputChange} required/>
                   </div>
                   <div className="form-group">
                     <label>Registration Number</label>
-                    <input type="text" defaultValue="PV-123456" />
+                    <input type="text" name='registrationNumber' value={agencyData.registrationNumber} onChange={handleInputChange} required/>
                   </div>
                 </div>
                 
                 <div className="form-row">
                   <div className="form-group">
-                    <label>Email Address</label>
-                    <input type="email" defaultValue="contact@serendipity.com" />
-                  </div>
-                  <div className="form-group">
                     <label>Contact Number</label>
-                    <input type="text" defaultValue="+94 77 123 4567" />
+                    <input type="text" name='contactNumber' value={agencyData.contactNumber} onChange={handleInputChange} required/>
                   </div>
                 </div>
 
                 <div className="form-group">
                   <label>Agency Address</label>
-                  <input type="text" defaultValue="No 12, Galle Road, Colombo 03" />
+                  <input type="text" name='address' value={agencyData.address} onChange={handleInputChange} required/>
                 </div>
 
                 <div className="form-group">
                   <label>Description (About Us)</label>
-                  <textarea rows="4" defaultValue="We provide the best luxury travel experiences across Sri Lanka..."></textarea>
+                  <textarea rows="4" name='description' value={agencyData.description} onChange={handleInputChange}></textarea>
                 </div>
 
-                <button type="button" className="save-settings-btn">
-                  <FaSave className="save-icon"/> Save Profile
+                <button type="submit" className="save-settings-btn" disabled={isLoading}>
+                  <FaSave className="save-icon"/> {isLoading ? "Saving..." : "Save Profile"}
                 </button>
               </form>
             </div>
