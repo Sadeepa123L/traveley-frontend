@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaUserTie, FaBuilding, FaLock, FaCamera, FaSave } from 'react-icons/fa';
 import './AgencySettings.css';
 import toast, { Toaster } from 'react-hot-toast';
 
-import {saveOrUpdateAgencyProfile} from '../../../../services/agencyService'
+import {saveOrUpdateAgencyProfile, getMyProfile} from '../../../../services/agencyService'
 
 const AgencySettings = () => {
 
@@ -11,6 +11,7 @@ const AgencySettings = () => {
   const [profileImage, setProfileImage] = useState(null);
   const [selectedPhoto, setSelectedPhoto] = useState(null); 
   const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const [agencyData, setAgencyData] = useState({
     agencyName: '',
@@ -21,6 +22,36 @@ const AgencySettings = () => {
   });
   
   const fileInputRef = useRef(null);
+
+
+  //Load agency profile details function
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      try {
+        const data = await getMyProfile();
+        if (data) {
+          setAgencyData({
+            agencyName: data.agencyName || '',
+            registrationNumber: data.registrationNumber || '',
+            contactNumber: data.contactNumber || '',
+            address: data.address || '',
+            description: data.description || ''
+          });
+          
+          if (data.photoUrl) {
+            setProfileImage(data.photoUrl);
+          }
+          
+          setIsEditing(true);
+        }
+      } catch (error) {
+        console.log("No existing profile found. User can create a new one.");
+        setIsEditing(false); 
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   const handleCameraClick = () => {
     fileInputRef.current.click();
@@ -55,11 +86,12 @@ const handleImageChange = (e) => {
 
       const result = await saveOrUpdateAgencyProfile(formData);
 
-      toast.success(result.message || "Agency Profile Saved Successfully! 🚀");
+      toast.success(result.message || "Agency Profile Saved Successfully!");
+      setIsEditing(true);
 
     } catch (error) {
       console.error(error);
-      toast.error(error.message);
+      toast.error(error.message || "Failed to save profile");
     } finally {
       setIsLoading(false);
     }
@@ -83,12 +115,6 @@ const handleImageChange = (e) => {
             <FaUserTie className="tab-icon" /> Agency Profile
           </button>
           <button 
-            className={`tab-btn ${activeTab === 'bank' ? 'active' : ''}`} 
-            onClick={() => setActiveTab('bank')}
-          >
-            <FaBuilding className="tab-icon" /> Bank Details
-          </button>
-          <button 
             className={`tab-btn ${activeTab === 'security' ? 'active' : ''}`} 
             onClick={() => setActiveTab('security')}
           >
@@ -97,6 +123,7 @@ const handleImageChange = (e) => {
         </div>
 
         <div className="settings-content">
+
           {activeTab === 'profile' && (
             <div className="settings-section fade-in">
               <h2>Agency Profile</h2>
@@ -158,51 +185,7 @@ const handleImageChange = (e) => {
                 </div>
 
                 <button type="submit" className="save-settings-btn" disabled={isLoading}>
-                  <FaSave className="save-icon"/> {isLoading ? "Saving..." : "Save Profile"}
-                </button>
-              </form>
-            </div>
-          )}
-
-          {activeTab === 'bank' && (
-            <div className="settings-section fade-in">
-              <h2>Bank Details</h2>
-              <p className="section-desc">These details will be used to transfer your earnings.</p>
-              
-              <form className="settings-form">
-                <div className="form-group">
-                  <label>Bank Name</label>
-                  <select>
-                    <option>Commercial Bank</option>
-                    <option>Bank of Ceylon</option>
-                    <option>Hatton National Bank</option>
-                    <option>Sampath Bank</option>
-                  </select>
-                </div>
-                
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Branch Name</label>
-                    <input type="text" defaultValue="Kollupitiya" />
-                  </div>
-                  <div className="form-group">
-                    <label>Branch Code</label>
-                    <input type="text" defaultValue="012" />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Account Holder Name</label>
-                  <input type="text" defaultValue="Serendipity Travels Pvt Ltd" />
-                </div>
-                
-                <div className="form-group">
-                  <label>Account Number</label>
-                  <input type="text" defaultValue="10023456789" />
-                </div>
-
-                <button type="button" className="save-settings-btn">
-                  <FaSave className="save-icon"/> Save Bank Details
+                  <FaSave className="save-icon"/>{isLoading ? "Saving..." : (isEditing ? "Update Profile" : "Save Profile")}
                 </button>
               </form>
             </div>

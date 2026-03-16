@@ -44,3 +44,20 @@ export const saveOrUpdateAgencyProfile = async (formData) => {
         throw new Error(errorMessage);
     }
 };
+
+export const getMyProfile = async () => {
+    try{
+        const token = Cookies.get('jwt_token');
+        if(!token) throw new Error("NO token found")
+
+                const reponse = await axios.get(`${API_BASE_URL}/getProfile`,{
+            headers: {
+                'Authorization' : `Bearer ${token}`
+            }
+        });
+        return reponse.data;
+    }catch(error){
+        console.error("Error fetching profile:", error);
+        throw new Error("Failed to fetch agency profile");
+    }
+}
