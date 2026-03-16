@@ -15,3 +15,18 @@ export const getPendingAgencies = async () => {
         throw error.response ? error.response.data : new Error("Network Error");
     }
 }
+
+export const approveAgencies = async (id) => {
+    try{
+        const token = Cookies.get('jwt_token');
+        console.log("Sending Token:", token);
+
+        const response = await api.put(`/agency/approve/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }catch (error){
+        throw error.response ? error.response.data : new Error("Network Error");
+    }
+}
