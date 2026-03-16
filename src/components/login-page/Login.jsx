@@ -6,7 +6,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import LoginBg from '../../assets/HomeImg.jpg'; 
 
-import {loginTraveler} from '../../services/travelerService'
+import {loginTraveler, redirectToGoogle} from '../../services/travelerService'
 import {loginAgency} from '../../services/agencyService'
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
@@ -42,7 +42,12 @@ function Login () {
         result = await loginAgency(username, password);
       }
 
-      const jwtToken = result.data.accessToken;
+      //Test
+      console.log("Full Backend Result:", result);
+
+      const jwtToken = typeof result.data === 'string' ? result.data : result?.data?.accessToken || result?.accessToken;
+
+
       //save token in cookies
       Cookies.set('jwt_token', jwtToken, { expires: 7, secure: true, sameSite: 'strict' });
 
@@ -50,6 +55,20 @@ function Login () {
       const userRole = decodeToken.role;
       
       console.log("My Backend Sent This Role: ", userRole);
+
+      if (userType === 'traveler' && userRole === 'AGENCY') {
+          Cookies.remove('jwt_token');
+          toast.error("Please use the Agency tab to log in.");
+          setIsLoading(false);
+          return;
+      }
+
+      if (userType === 'agency' && userRole === 'TRAVELER') {
+          Cookies.remove('jwt_token');
+          toast.error("Please use the Traveler tab to log in.");
+          setIsLoading(false);
+          return;
+      }
 
       toast.success(result.message || "Login Successful!");
 
@@ -147,16 +166,16 @@ function Login () {
           </button>
 
        
-          <div className="divider">
+          {/* <div className="divider">
             <span>Or continue with</span>
-          </div>
+          </div> */}
 
           {userType === 'traveler' && (
             <>
               <div className="divider">
                 <span>Or continue with</span>
               </div>
-              <button type="button" className="google-btn">
+              <button type="button" className="google-btn" onClick={redirectToGoogle}>
                 <FcGoogle className="google-icon" /> 
                 Sign in with Google
               </button>

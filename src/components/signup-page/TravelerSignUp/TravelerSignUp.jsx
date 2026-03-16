@@ -40,8 +40,6 @@ const TravelerSignUp = () => {
    }
   };
 
-  
-
   return (
   
     <div className="ts-container">
@@ -66,7 +64,7 @@ const TravelerSignUp = () => {
             <p>Sign up to unlock exclusive deals and plan your dream vacation.</p>
           </div>
 
-          <button className="ts-google-btn">
+          <button className="ts-google-btn" onClick={redirectToGoogle}>
             <FcGoogle className="google-icon" /> 
             Continue with Google
           </button>
