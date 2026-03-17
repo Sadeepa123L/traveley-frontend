@@ -61,3 +61,16 @@ export const getMyProfile = async () => {
         throw new Error("Failed to fetch agency profile");
     }
 }
+
+export const updatePassword = async (passwordData) => {
+        const token = Cookies.get('jwt_token');
+        if(!token) throw new Error("NO token found")
+
+            const response = await axios.put(`http://localhost:8080/api/v1/agency/updatePassword`, passwordData, {
+                headers : {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            return response.data;
+
+};
