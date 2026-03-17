@@ -1,4 +1,8 @@
 import api from './api';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
+const API_BASE_URL = 'http://localhost:8080/api/v1/agencyProfile'
 
 export const registerTraveler = async (username, password) => {
     try {
@@ -20,3 +24,14 @@ export const loginTraveler = async(username, password) => {
         throw error.response ? error.response.data : new error("Network Error");
     }
 };
+
+export const getActiveAgencies = async () => {
+     const token = Cookies.get('jwt_token');
+
+     const response = await axios.get(`${API_BASE_URL}/activeAgencies`, {
+        headers: { 
+            'Authorization': `Bearer ${token}` 
+        }
+    });
+    return response.data;
+}
