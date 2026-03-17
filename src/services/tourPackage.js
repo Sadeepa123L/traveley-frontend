@@ -73,4 +73,15 @@ export const updatePackage = async (id, formData) => {
 
     });
      return response.data;
-    }
+    };
+
+ export const getActivePackages = async () => {
+    const token = Cookies.get('jwt_token');
+
+    const response = await axios.get(`${API_BASE_URL}/activePackages`, {
+        headers: { 
+            'Authorization': `Bearer ${token}` 
+        }
+    });
+    return response.data;
+ };

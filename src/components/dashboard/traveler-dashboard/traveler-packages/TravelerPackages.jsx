@@ -1,60 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaMapMarkerAlt, FaRegClock, FaStar, FaArrowRight, FaTag } from 'react-icons/fa';
 import './TravelerPackages.css';
+import toast, { Toaster } from 'react-hot-toast';
+
+import {getActivePackages} from '../../../../services/tourPackage'
 
 const TravelerPackages = () => {
   const [activeFilter, setActiveFilter] = useState('All');
+  const [packages, setPackages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const filters = ['All', 'Adventure', 'Honeymoon', 'Cultural', 'Nature'];
-  const packages = [
-    {
-      id: 1,
-      title: "Royal Heritage Tour",
-      location: "Kandy & Nuwara Eliya",
-      duration: "4 Days / 3 Nights",
-      price: "$320",
-      rating: 4.9,
-      reviews: 128,
-      category: "Cultural",
-      agency: "Serendipity Travels",
-      image: "https://images.unsplash.com/photo-1588598198321-9833be5c66fc?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 2,
-      title: "Ella Adventure Trail",
-      location: "Ella, Badulla",
-      duration: "3 Days / 2 Nights",
-      price: "$180",
-      rating: 4.8,
-      reviews: 95,
-      category: "Adventure",
-      agency: "Wanderlust Lanka",
-      image: "https://images.unsplash.com/photo-1566323133860-23a7895e5b32?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 3,
-      title: "Romantic South Coast",
-      location: "Mirissa & Galle",
-      duration: "5 Days / 4 Nights",
-      price: "$450",
-      rating: 5.0,
-      reviews: 210,
-      category: "Honeymoon",
-      agency: "Ocean Blue Tours",
-      image: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?auto=format&fit=crop&w=800&q=80"
-    },
-    {
-      id: 4,
-      title: "Wild Safari Experience",
-      location: "Yala National Park",
-      duration: "2 Days / 1 Night",
-      price: "$210",
-      rating: 4.7,
-      reviews: 84,
-      category: "Nature",
-      agency: "Ceylon Wildlife",
-      image: "https://images.unsplash.com/photo-1625736300986-e74017f8a735?auto=format&fit=crop&w=800&q=80"
-    }
-  ];
+
+  useEffect(() => {
+    const fetchPackages = async () => {
+      try {
+        const data = await getActivePackages();
+        setPackages(data);
+      } catch (error) {
+        console.error("Error fetching packages:", error);
+        toast.error("Failed to load tour packages.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPackages();
+  }, []);
+
+  const getPackageCategory = (pkg) => {
+    const textToSearch = `${pkg.title || ''} ${pkg.description || ''}`.toLowerCase();
+    const foundCategory = filters.slice(1).find(f => textToSearch.includes(f.toLowerCase()));
+    return foundCategory || 'Tour';
+  };
+
+  const filteredPackages = activeFilter === 'All' 
+    ? packages 
+    : packages.filter(pkg => {
+        const textToSearch = `${pkg.title || ''} ${pkg.description || ''}`.toLowerCase();
+        return textToSearch.includes(activeFilter.toLowerCase());
+      });
 
   return (
     <div className="packages-page-container">
@@ -78,34 +63,48 @@ const TravelerPackages = () => {
         </div>
       </div>
 
+
+      {/* Loading State & Empty State */}
+      {isLoading ? (
+        <div style={{ textAlign: 'center', padding: '50px', fontSize: '18px' }}>
+          Loading Amazing Packages...
+        </div>
+      ) : filteredPackages.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '50px', fontSize: '18px', color: '#666' }}>
+          No packages found for this category. Check back later!
+        </div>
+      ) : (
+
       <div className="packages-grid">
-        {packages.map((pkg, index) => (
+        {filteredPackages.map((pkg, index) => (
           <div className="modern-package-card" key={pkg.id} style={{ animationDelay: `${index * 0.1}s` }}>
             
             <div className="pkg-image-wrapper">
-              <img src={pkg.image} alt={pkg.title} className="pkg-image" />
+              <img src={pkg.imageUrl || "https://images.unsplash.com/photo-1588598198321-9833be5c66fc"} 
+              alt={pkg.title}
+               className="pkg-image" />
               
               <div className="glass-badge duration-badge">
                 <FaRegClock className="badge-icon" /> {pkg.duration}
               </div>
               
               <div className="glass-badge category-badge">
-                <FaTag className="badge-icon" /> {pkg.category}
+                <FaTag className="badge-icon" /> {getPackageCategory(pkg)}
               </div>
             </div>
 
             <div className="pkg-info">
               <div className="pkg-location">
-                <FaMapMarkerAlt className="loc-icon" /> {pkg.location}
+                <FaMapMarkerAlt className="loc-icon" /> {pkg.destination}
               </div>
               
               <h2 className="pkg-title">{pkg.title}</h2>
-              <p className="pkg-agency">By <span>{pkg.agency}</span></p>
+              <p className="pkg-agency">By <span>{pkg.agencyProfile?.agencyName || "Trusted Agency"}</span></p>
 
               <div className="pkg-rating">
                 <FaStar className="star-icon" />
-                <span className="rate-num">{pkg.rating}</span>
-                <span className="reviews">({pkg.reviews} reviews)</span>
+                <span className="rate-num">4.8</span>
+                <span className="reviews">((120 reviews))</span>
               </div>
               <div className="pkg-footer">
                 <div className="price-box">
@@ -122,7 +121,7 @@ const TravelerPackages = () => {
           </div>
         ))}
       </div>
-
+      )}
     </div>
   );
 };
