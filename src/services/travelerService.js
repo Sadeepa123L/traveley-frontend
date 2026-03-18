@@ -35,3 +35,15 @@ export const getActiveAgencies = async () => {
     });
     return response.data;
 }
+
+export const getLatestPackages = async () => {
+     const token = Cookies.get('jwt_token');
+
+     const response = await axios.get(`http://localhost:8080/api/v1/tourPackage/latestPackages`, {
+
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+     });
+     return response.data;
+}
