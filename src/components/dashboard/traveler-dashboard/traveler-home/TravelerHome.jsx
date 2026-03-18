@@ -1,40 +1,46 @@
-import React from 'react';
-import { FaMapMarkerAlt, FaCalendarAlt, FaUserFriends, FaStar } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { FaMapMarkerAlt, FaCalendarAlt, FaUserFriends, FaStar, FaRegClock, FaTag, FaArrowRight } from 'react-icons/fa';
 import './TravelerHome.css';
 
+import { getLatestPackages } from '../../../../services/travelerService';
+import toast, { Toaster } from 'react-hot-toast';
+
 const TravelerHome = () => {
-  const packages = [
-    {
-      id: 1,
-      title: "Sigiriya & Dambulla Tour",
-      agency: "Serendipity Travels",
-      price: "$120",
-      days: "2 Days",
-      rating: 4.8,
-      image: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-      id: 2,
-      title: "Ella Train Journey & Hike",
-      agency: "Wanderlust Lanka",
-      price: "$85",
-      days: "3 Days",
-      rating: 4.9,
-      image: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?auto=format&fit=crop&w=600&q=80"
-    },
-    {
-      id: 3,
-      title: "Mirissa Whale Watching",
-      agency: "Ocean Blue Tours",
-      price: "$150",
-      days: "1 Day",
-      rating: 4.7,
-      image: "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463?auto=format&fit=crop&w=600&q=80"
-    }
-  ];
+
+  const [latestPackages, setLatestPackages] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const filters = ['All', 'Adventure', 'Honeymoon', 'Cultural', 'Nature'];
+
+  useEffect(() => {
+    const fetchLatestPackages = async () => {
+      try {
+        const data = await getLatestPackages();
+        setLatestPackages(data);
+      } catch (error) {
+        console.error("Error fetching latest packages:", error);
+        toast.error("Failed to load top packages.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchLatestPackages();
+  }, []);
+
+  const getPackageCategory = (pkg) => {
+    const textToSearch = `${pkg.title || ''} ${pkg.description || ''}`.toLowerCase();
+    const foundCategory = filters.slice(1).find(f => textToSearch.includes(f.toLowerCase()));
+    return foundCategory || 'Tour';
+  };
+
+  const openModal = (pkg) => setSelectedPackage(pkg);
+  const closeModal = () => setSelectedPackage(null);
 
   return (
     <div className="traveler-home-container">
+      <Toaster position="top-right" />
     
       <section className="home-hero-section">
         <div className="hero-content">
@@ -59,28 +65,36 @@ const TravelerHome = () => {
           <p>Based on your preferences and trending destinations</p>
         </div>
 
+        {isLoading ? (
+          <div style={{ textAlign: 'center', padding: '50px' }}>Loading latest packages...</div>
+        ) : latestPackages.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '50px', color: '#666' }}>No packages available right now.</div>
+        ) : (
+
         <div className="packages-grid">
-          {packages.map((pkg) => (
+          {latestPackages.map((pkg) => (
             <div className="package-card" key={pkg.id}>
               <div className="card-image-wrapper">
-                <img src={pkg.image} alt={pkg.title} className="card-image" />
-                <div className="card-badge">{pkg.days}</div>
+                <img src={pkg.imageUrl || "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463"} alt={pkg.title} className="card-image" />
+                <div className="card-badge">{pkg.duration}</div>
               </div>
               <div className="card-details">
                 <div className="card-rating">
                   <FaStar className="star-icon" />
-                  <span>{pkg.rating}</span>
+                  <span>4.8</span>
                 </div>
                 <h3 className="card-title">{pkg.title}</h3>
-                <p className="card-agency">By {pkg.agency}</p>
+                <p className="card-agency">By {pkg.agencyProfile?.agencyName || "Trusted Agency"}</p>
                 <div className="card-footer">
-                  <span className="card-price">{pkg.price}</span>
-                  <button className="book-btn">View Details</button>
+                  <span className="card-price">${pkg.price}</span>
+                
+                  <button className="book-btn" onClick={() => openModal(pkg)}>View Details</button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+        )}
       </section>
 
       <section className="ai-planner-banner">
@@ -92,6 +106,51 @@ const TravelerHome = () => {
         <div className="banner-image">
         </div>
       </section>
+
+      {selectedPackage && (
+        <div className="package-modal-overlay" onClick={closeModal}>
+          <div className="package-modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" onClick={closeModal}>&times;</button>
+            
+            <div className="modal-body">
+              <div className="modal-image-col">
+                <img 
+                  src={selectedPackage.imageUrl || "https://images.unsplash.com/photo-1596815064285-45ed8a9c0463"} 
+                  alt={selectedPackage.title} 
+                />
+                <div className="modal-price-badge">
+                  <span>${selectedPackage.price}</span>
+                </div>
+              </div>
+              
+              <div className="modal-details-col">
+                <div className="modal-header-info">
+                  <span className="modal-category"><FaTag /> {getPackageCategory(selectedPackage)}</span>
+                  <span className="modal-duration"><FaRegClock /> {selectedPackage.duration}</span>
+                </div>
+                
+                <h2>{selectedPackage.title}</h2>
+                <p className="modal-agency">By <span>{selectedPackage.agencyProfile?.agencyName || "Trusted Agency"}</span></p>
+                
+                <div className="modal-location">
+                  <FaMapMarkerAlt className="loc-icon" /> {selectedPackage.destination}
+                </div>
+                
+                <div className="modal-description">
+                  <h3>About this package</h3>
+                  <p>{selectedPackage.description || "No description provided for this package. Contact the agency for more details."}</p>
+                </div>
+                
+                <div className="modal-actions">
+                  <button className="modal-book-btn">
+                    Proceed to Book <FaArrowRight />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
     </div>
   );
