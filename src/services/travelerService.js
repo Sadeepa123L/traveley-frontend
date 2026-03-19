@@ -47,3 +47,28 @@ export const getLatestPackages = async () => {
      });
      return response.data;
 }
+
+export const saveTravelerProfile = async (formData) => {
+
+    const token = Cookies.get('jwt_token');
+
+    const response = await axios.post(`http://localhost:8080/api/v1/TravelerProfile/save`, formData, {
+
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.data;
+}
+
+export const getProfile = async () => {
+
+    const token = Cookies.get('jwt_token');
+    const response = await axios.get(`http://localhost:8080/api/v1/TravelerProfile/getProfile`, {
+
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.data;
+}

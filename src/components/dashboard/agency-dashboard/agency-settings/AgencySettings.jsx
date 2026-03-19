@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FaUserTie, FaLock, FaCamera, FaSave, FaEye, FaEyeSlash } from 'react-icons/fa'; // 👈 FaEye, FaEyeSlash එකතු කළා
+import { FaUserTie, FaLock, FaCamera, FaSave, FaEye, FaEyeSlash } from 'react-icons/fa'; 
 import './AgencySettings.css';
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -13,7 +13,7 @@ const AgencySettings = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
 
-    // 🌟 පාස්වර්ඩ් පෙන්වන්න/හංගන්න වෙනම State දෙකක්
+
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 

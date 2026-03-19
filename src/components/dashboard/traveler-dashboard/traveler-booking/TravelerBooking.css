@@ -6,6 +6,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 50px;
+  position: relative; /* 🌟 Added for modal positioning */
 }
 
 /* --- Header --- */
@@ -297,4 +298,154 @@
     .submit-booking-btn {
         font-size: 14px;
     }
+}
+
+/* ========================================================
+   🌟 NEW: PROFILE SETUP MODAL & BLUR EFFECT
+   ======================================================== */
+
+.booking-main-wrapper {
+  transition: all 0.4s ease;
+}
+
+/* Blur Effect for background content */
+.blurred-content {
+  filter: blur(8px);
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.6;
+}
+
+/* Glassmorphism Overlay */
+.profile-setup-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.4);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 80px;
+}
+
+/* The Modal */
+.profile-setup-modal {
+  background: #ffffff;
+  width: 100%;
+  max-width: 600px;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: slideDownFade 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDownFade {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.profile-modal-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-modal-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 10px;
+}
+
+.profile-modal-header p {
+  color: #666;
+  font-size: 15px;
+}
+
+/* Modal Form Styles */
+.profile-setup-form .form-group label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.profile-setup-form .form-group input {
+  width: 100%;
+  padding: 14px 15px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  background-color: #f9fafb;
+  font-size: 15px;
+  transition: all 0.3s ease;
+}
+
+.profile-setup-form .form-group input:focus {
+  border-color: #c87a2c;
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(200, 122, 44, 0.1);
+}
+
+.save-profile-btn {
+  width: 100%;
+  background-color: #111;
+  color: #fff;
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  margin-top: 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.save-profile-btn:hover {
+  background-color: #c87a2c;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(200, 122, 44, 0.3);
+}
+
+/* Modal Responsive */
+@media screen and (max-width: 768px) {
+  .profile-setup-overlay {
+    padding: 20px;
+    padding-top: 40px;
+    align-items: flex-start;
+  }
+  .profile-setup-modal {
+    padding: 25px;
+    border-radius: 20px;
+  }
+  .profile-modal-header h2 {
+    font-size: 24px;
+  }
+  .profile-modal-header p {
+    font-size: 14px;
+  }
+  .profile-setup-form .form-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+  .save-profile-btn {
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile-setup-modal {
+    padding: 20px 15px;
+  }
+  .profile-modal-header h2 {
+    font-size: 22px;
+  }
 }
