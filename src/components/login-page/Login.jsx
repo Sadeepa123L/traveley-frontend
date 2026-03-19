@@ -11,7 +11,7 @@ import {loginAgency} from '../../services/agencyService'
 import toast, { Toaster } from 'react-hot-toast';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,} from 'react-router-dom';
 
 function Login () {
   const [userType, setUserType] = useState('traveler'); 
@@ -24,9 +24,11 @@ function Login () {
 
   const navigate = useNavigate();
 
+
   useEffect(() => {
     AOS.init({ duration: 1000 });
   }, []);
+
 
   //Handle the login
   const handleLogin = async (e) => {
@@ -90,6 +92,7 @@ function Login () {
       setIsLoading(false);
     }
   }
+
 
   return (
     <div className="login-container">
@@ -165,10 +168,6 @@ function Login () {
               : (userType === 'traveler' ? 'Login to Account' : 'Login to Dashboard')}
           </button>
 
-       
-          {/* <div className="divider">
-            <span>Or continue with</span>
-          </div> */}
 
           {userType === 'traveler' && (
             <>

@@ -28,6 +28,8 @@ import AgencySettings from '../dashboard/agency-dashboard/agency-settings/Agency
 import AdminLayout from '../layout/adminlayout/layout'
 import AdminHome from '../dashboard/admin-dashboard/admin-home/AdminHome'
 
+import OAuth2RedirectHandler from '../login-page/OAuth2RedirectHandler'
+
 
 const AppRoutes = () => {
   return (
@@ -53,6 +55,7 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/Travelersignup" element={<TravelerSignUp />} />
       <Route path="/Agencysignup" element={<AgencySignUp />} />
+      <Route path="/oauth2/redirect" element={<OAuth2RedirectHandler />} />
 
 
       <Route element={<TravelerLayout/>}>
