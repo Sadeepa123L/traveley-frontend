@@ -1,11 +1,11 @@
 import React from 'react';
+import { NavLink } from 'react-router-dom';
 import { FaTachometerAlt, FaUsers, FaBuilding, FaSignOutAlt, FaTimes, FaUserShield } from 'react-icons/fa';
 import './AdminSideBar.css';
 
 function AdminSidebar({ isOpen, setIsOpen }) {
   return (
     <>
-      {/* Mobile Menu Overlay */}
       {isOpen && <div className="admin-overlay" onClick={() => setIsOpen(false)}></div>}
 
       <aside className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
@@ -18,20 +18,29 @@ function AdminSidebar({ isOpen, setIsOpen }) {
         </div>
 
         <nav className="admin-nav-menu">
-          {/* 1. Dashboard Link */}
-          <button className="admin-nav-btn active">
+          <NavLink 
+            to="/AdminDashBoard" 
+            className={({ isActive }) => isActive ? "admin-nav-btn active" : "admin-nav-btn"}
+            onClick={() => setIsOpen(false)}
+          >
             <FaTachometerAlt className="nav-icon" /> Home
-          </button>
+          </NavLink>
           
-          {/* 2. Travelers Link */}
-          <button className="admin-nav-btn">
+          <NavLink 
+            to="/AdminTraveler" 
+            className={({ isActive }) => isActive ? "admin-nav-btn active" : "admin-nav-btn"}
+            onClick={() => setIsOpen(false)}
+          >
             <FaUsers className="nav-icon" /> Travelers
-          </button>
+          </NavLink>
           
-          {/* 3. Agencies Link */}
-          <button className="admin-nav-btn">
+          <NavLink 
+            to="/AdminAgency" 
+            className={({ isActive }) => isActive ? "admin-nav-btn active" : "admin-nav-btn"}
+            onClick={() => setIsOpen(false)}
+          >
             <FaBuilding className="nav-icon" /> Agencies
-          </button>
+          </NavLink>
         </nav>
 
         <div className="admin-logout-wrapper">

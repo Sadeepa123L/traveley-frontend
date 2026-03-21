@@ -30,3 +30,18 @@ export const approveAgencies = async (id) => {
         throw error.response ? error.response.data : new Error("Network Error");
     }
 }
+
+export const deleteTravler = async (id) => {
+    try{
+    
+        const token = Cookies.get('jwt_token');
+        const response = await api.delete(`admin/traveler/${id}`, {
+
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    }catch(error){
+         throw error.response ? error.response.data : new Error("Network Error");
+    }
+}

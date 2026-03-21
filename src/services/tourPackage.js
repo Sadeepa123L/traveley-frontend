@@ -1,8 +1,5 @@
 import api from './api'
 import Cookies from 'js-cookie';
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8080/api/v1/tourPackage';
 
 export const saveTourPackage = async (formData) => {
     try{
@@ -12,7 +9,7 @@ export const saveTourPackage = async (formData) => {
         if (!token) {
         throw new Error("No authentication token found. Please login again.");
             }
-        const reponse = await axios.post(`${API_BASE_URL}/save`, formData, {
+        const reponse = await api.post('tourPackage/save', formData, {
             headers: {
                 'Authorization' : `Bearer ${token}`
             }
@@ -33,7 +30,7 @@ export const getMyPackages = async ()=>{
         const token = Cookies.get('jwt_token');
         if(!token) throw new Error("NO token found")
 
-            const reponse = await axios.get(`${API_BASE_URL}/myPackages`,{
+            const reponse = await api.get('tourPackage/myPackages',{
             headers: {
                 'Authorization' : `Bearer ${token}`
             }
@@ -50,7 +47,7 @@ export const updatePackage = async (id, formData) => {
         const token = Cookies.get('jwt_token');
         if(!token) throw new Error("NO token found")
 
-            const response = await axios.put(`${API_BASE_URL}/update/${id}`, formData, {
+            const response = await api.put('tourPackage/update/${id}', formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
@@ -68,7 +65,9 @@ export const updatePackage = async (id, formData) => {
  };
  export const deletePackage = async (id) => {
         const token = Cookies.get('jwt_token');
-        const response = await axios.delete(`${API_BASE_URL}/delete/${id}`, {
+
+        const response = await api.delete('tourPackage/delete/${id}', {
+
         headers: { 'Authorization': `Bearer ${token}` }
 
     });
@@ -78,7 +77,7 @@ export const updatePackage = async (id, formData) => {
  export const getActivePackages = async () => {
     const token = Cookies.get('jwt_token');
 
-    const response = await axios.get(`${API_BASE_URL}/activePackages`, {
+    const response = await api.get('tourPackage/activePackages', {
         headers: { 
             'Authorization': `Bearer ${token}` 
         }

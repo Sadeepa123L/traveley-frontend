@@ -1,8 +1,5 @@
 import api from './api';
 import Cookies from 'js-cookie';
-import axios from 'axios';
-
-const API_BASE_URL = 'http://localhost:8080/api/v1/agencyProfile'
 
 export const registerTraveler = async (username, password) => {
     try {
@@ -28,7 +25,7 @@ export const loginTraveler = async(username, password) => {
 export const getActiveAgencies = async () => {
      const token = Cookies.get('jwt_token');
 
-     const response = await axios.get(`${API_BASE_URL}/activeAgencies`, {
+     const response = await api.get('agencyProfile/activeAgencies', {
         headers: { 
             'Authorization': `Bearer ${token}` 
         }
@@ -39,7 +36,7 @@ export const getActiveAgencies = async () => {
 export const getLatestPackages = async () => {
      const token = Cookies.get('jwt_token');
 
-     const response = await axios.get(`http://localhost:8080/api/v1/tourPackage/latestPackages`, {
+     const response = await api.get('/tourPackage/latestPackages', {
 
         headers: {
             'Authorization': `Bearer ${token}`
@@ -52,7 +49,7 @@ export const saveTravelerProfile = async (formData) => {
 
     const token = Cookies.get('jwt_token');
 
-    const response = await axios.post(`http://localhost:8080/api/v1/TravelerProfile/save`, formData, {
+    const response = await api.post('/TravelerProfile/save', formData, {
 
         headers: {
             'Authorization': `Bearer ${token}`
@@ -64,7 +61,18 @@ export const saveTravelerProfile = async (formData) => {
 export const getProfile = async () => {
 
     const token = Cookies.get('jwt_token');
-    const response = await axios.get(`http://localhost:8080/api/v1/TravelerProfile/getProfile`, {
+    const response = await api.get('/TravelerProfile/getProfile', {
+
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.data;
+}
+export const getAllProfiles = async () => {
+
+    const token = Cookies.get('jwt_token');
+    const response = await api.get('/TravelerProfile/getAllProfiles', {
 
         headers: {
             'Authorization': `Bearer ${token}`

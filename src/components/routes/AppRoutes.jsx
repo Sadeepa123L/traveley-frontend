@@ -27,6 +27,8 @@ import AgencySettings from '../dashboard/agency-dashboard/agency-settings/Agency
 
 import AdminLayout from '../layout/adminlayout/layout'
 import AdminHome from '../dashboard/admin-dashboard/admin-home/AdminHome'
+import AdminTraveler from '../dashboard/admin-dashboard/admin-traveler/traveler'
+import AdminAgency from '../dashboard/admin-dashboard/admin-agency/agency'
 
 import OAuth2RedirectHandler from '../login-page/OAuth2RedirectHandler'
 
@@ -79,6 +81,8 @@ x
       <Route element={<AdminLayout/>}>
         <Route path='/AdminDashBoard' element={<Navigate to = "/AdminHome"/>}/>
         <Route path='/AdminHome' element={<AdminHome/>}/>
+        <Route path='/AdminTraveler' element={<AdminTraveler/>}/>
+        <Route path='/AdminAgency' element={<AdminAgency/>}/>
       </Route>
 
       <Route path="*" element={<h1>404 - Not Found</h1>} />

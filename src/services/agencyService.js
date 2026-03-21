@@ -1,8 +1,6 @@
-import axios from 'axios';
 import api from './api'
 import Cookies from 'js-cookie';
 
-const API_BASE_URL ='http://localhost:8080/api/v1/agencyProfile';
 
 export const registerAgency = async(username, password) => {
     try{
@@ -31,7 +29,7 @@ export const saveOrUpdateAgencyProfile = async (formData) => {
             throw new Error("No authentication token found. Please login again.");
         }
 
-        const response = await axios.post(`${API_BASE_URL}/save`, formData,{
+        const response = await api.post('agencyProfile/save', formData,{
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -50,7 +48,7 @@ export const getMyProfile = async () => {
         const token = Cookies.get('jwt_token');
         if(!token) throw new Error("NO token found")
 
-                const reponse = await axios.get(`${API_BASE_URL}/getProfile`,{
+                const reponse = await api.get('agencyProfile/getProfile',{
             headers: {
                 'Authorization' : `Bearer ${token}`
             }
@@ -66,7 +64,7 @@ export const updatePassword = async (passwordData) => {
         const token = Cookies.get('jwt_token');
         if(!token) throw new Error("NO token found")
 
-            const response = await axios.put(`http://localhost:8080/api/v1/agency/updatePassword`, passwordData, {
+            const response = await api.put('agency/updatePassword', passwordData, {
                 headers : {
                     'Authorization': `Bearer ${token}`
                 }
