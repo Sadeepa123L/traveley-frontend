@@ -66,7 +66,7 @@ export const updatePackage = async (id, formData) => {
  export const deletePackage = async (id) => {
         const token = Cookies.get('jwt_token');
 
-        const response = await api.delete('tourPackage/delete/${id}', {
+        const response = await api.delete(`tourPackage/delete/${id}`, {
 
         headers: { 'Authorization': `Bearer ${token}` }
 

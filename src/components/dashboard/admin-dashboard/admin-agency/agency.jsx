@@ -1,40 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './agency.css';
 import { FaTrashAlt, FaSearch, FaBuilding, FaBan, FaCheckCircle, FaStoreSlash } from 'react-icons/fa';
+import { getActiveAndSuspendAgencies, updateStatus, deleteAgency } from '../../../../services/agencyService';
+import toast, { Toaster } from 'react-hot-toast';
 
-const AgencyManagement = () => {
-    const [agencies, setAgencies] = useState([
-        { id: 1, name: 'Dream Travels', email: 'contact@dreamtravels.com', joined: '2024-01-15', status: 'Active' },
-        { id: 2, name: 'Lanka Tours', email: 'info@lankatours.lk', joined: '2024-02-20', status: 'Suspended' },
-        { id: 3, name: 'Global Explorers', email: 'hello@globalexplorers.com', joined: '2024-03-05', status: 'Active' },
-        { id: 4, name: 'Paradise Holidays', email: 'admin@paradise.com', joined: '2024-03-18', status: 'Active' },
-    ]);
-
+const Agency = () => {
+    const [agencies, setAgencies] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
 
-    const handleDelete = (id) => {
-        if (window.confirm("Are you sure you want to delete this agency? This action cannot be undone.")) {
-            setAgencies(agencies.filter(a => a.id !== id));
+    useEffect(() => {
+         const fetchAgencies = async () => {
+            try {
+                const data = await getActiveAndSuspendAgencies();
+                setAgencies(data);
+            } catch(error) {
+                 toast.error("Error loading Agencies");
+            }
+         };
+         fetchAgencies();
+    }, []);
+
+    const handleDelete = async (id) => {
+       
+
+        if (window.confirm("Are you sure you want to delete this agency? This action cannot be undone.")) { 
+            try {
+               await deleteAgency(id);
+               setAgencies(agencies.filter(a => a.id !== id));
+               toast.success("Agency deleted!")
+            } catch (error) {
+               toast.error("Failed to delete agency");
+            }
         }
     };
 
-    const handleToggleSuspend = (id) => {
-        setAgencies(agencies.map(agency => {
-            if (agency.id === id) {
-                const newStatus = agency.status === 'Active' ? 'Suspended' : 'Active';
-                return { ...agency, status: newStatus };
-            }
-            return agency;
-        }));
+    const handleToggleSuspend = async (id) => {
+       try {
+         await updateStatus(id);
+         
+         setAgencies(agencies.map(agency => {
+             if (agency.id === id) {
+                const currentStatus = agency.status || 'ACTIVE';
+                const newStatus = currentStatus === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
+                 return { ...agency, status: newStatus };
+             }
+             return agency;
+         }));
+
+         toast.success("Agency status updated successfully!");
+
+       } catch (error) {
+        console.log(error);
+        toast.error("Failed to update status. Please try again.");
+       }
     };
 
-    const filteredAgencies = agencies.filter(a => 
-        a.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        a.email.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredAgencies = Array.isArray(agencies) ? agencies.filter(a => {
+        const agencyName = `${a.name || ''}`.toLowerCase();
+        const search = searchTerm.toLowerCase();
+        return agencyName.includes(search);
+   }) : [];
 
     return (
         <div className="admin-content-container">
+            <Toaster position="top-right" />
+
             <h2 className="page-title">Agency Management</h2>
 
             <div className="stats-grid">
@@ -42,21 +72,21 @@ const AgencyManagement = () => {
                     <div className="stat-icon"><FaBuilding /></div>
                     <div className="stat-info">
                         <h3>Total Agencies</h3>
-                        <p>{agencies.length}</p>
+                        <p>{Array.isArray(agencies) ? agencies.length : 0}</p>
                     </div>
                 </div>
                 <div className="stat-card active-users">
                     <div className="stat-icon"><FaCheckCircle /></div>
                     <div className="stat-info">
                         <h3>Active Agencies</h3>
-                        <p>{agencies.filter(a => a.status === 'Active').length}</p>
+                        <p>{Array.isArray(agencies) ? agencies.filter(a => (a.status || 'ACTIVE').toUpperCase() === 'ACTIVE').length : 0}</p>
                     </div>
                 </div>
                 <div className="stat-card suspended-users">
                     <div className="stat-icon"><FaStoreSlash /></div>
                     <div className="stat-info">
                         <h3>Suspended</h3>
-                        <p>{agencies.filter(a => a.status === 'Suspended').length}</p>
+                        <p>{Array.isArray(agencies) ? agencies.filter(a => (a.status || '').toUpperCase() === 'SUSPENDED').length : 0}</p>
                     </div>
                 </div>
             </div>
@@ -78,27 +108,30 @@ const AgencyManagement = () => {
                         <tr>
                             <th>ID</th>
                             <th>Agency Name</th>
-                            <th>Email Address</th>
-                            <th>Joined Date</th>
+                            <th>Contact Number</th>
+                            <th>Registration Number</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {filteredAgencies.map((agency) => (
+                        {filteredAgencies.map((agency) => {
+                             const displayStatus = agency.status ? String(agency.status).toUpperCase() : 'ACTIVE';
+                            
+                             return (
                             <tr key={agency.id}>
                                 <td>#{agency.id}</td>
                                 <td className="user-name-cell">{agency.name}</td>
-                                <td>{agency.email}</td>
-                                <td>{agency.joined}</td>
+                                <td>{agency.contactNumber}</td>
+                                <td>{agency.registrationNumber}</td>
                                 <td>
-                                    <span className={`status-badge ${agency.status.toLowerCase()}`}>
-                                        {agency.status}
+                                    <span className={`status-badge ${displayStatus.toLowerCase()}`}>
+                                        {displayStatus}
                                     </span>
                                 </td>
                                 <td>
                                     <div className="action-buttons">
-                                        {agency.status === 'Active' ? (
+                                        {displayStatus === 'ACTIVE' ? (
                                             <button 
                                                 className="action-btn suspend-btn" 
                                                 onClick={() => handleToggleSuspend(agency.id)}
@@ -126,7 +159,8 @@ const AgencyManagement = () => {
                                     </div>
                                 </td>
                             </tr>
-                        ))}
+                            );
+                        })}
                     </tbody>
                 </table>
                 {filteredAgencies.length === 0 && <p className="no-data">No agencies found!</p>}
@@ -135,4 +169,4 @@ const AgencyManagement = () => {
     );
 };
 
-export default AgencyManagement;
+export default Agency;

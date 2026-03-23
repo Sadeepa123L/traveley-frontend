@@ -1,3 +1,4 @@
+import { data } from 'react-router-dom';
 import api from './api'
 import Cookies from 'js-cookie';
 
@@ -72,3 +73,36 @@ export const updatePassword = async (passwordData) => {
             return response.data;
 
 };
+export const getActiveAndSuspendAgencies = async () => {
+     const token = Cookies.get('jwt_token');
+
+     const response = await api.get('agencyProfile/active-suspend', {
+        headers: { 
+            'Authorization': `Bearer ${token}` 
+        }
+    });
+    return response.data;
+}
+
+export const updateStatus = async (id) => {
+     const token = Cookies.get('jwt_token');
+     console.log(token);
+          const response = await api.put(`agency/updateStatus/${id}`, {}, {
+        headers: { 
+            'Authorization': `Bearer ${token}` 
+        }
+    });
+    return response.data;
+}
+
+export const deleteAgency = async (id) => {
+
+    const token = Cookies.get('jwt_token');
+
+              const response = await api.delete(`admin/deleteAgency/${id}`,{
+        headers: { 
+            'Authorization': `Bearer ${token}` 
+        }
+    });
+    return response.data;
+}

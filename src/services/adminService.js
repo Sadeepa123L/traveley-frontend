@@ -1,3 +1,4 @@
+import { data } from 'react-router-dom';
 import api from './api'
 import Cookies from 'js-cookie';
 
@@ -41,6 +42,7 @@ export const deleteTravler = async (id) => {
                 Authorization: `Bearer ${token}`
             }
         });
+        return response.data;
     }catch(error){
          throw error.response ? error.response.data : new Error("Network Error");
     }

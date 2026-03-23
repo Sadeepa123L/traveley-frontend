@@ -28,6 +28,7 @@ const TravelerAgencies = () => {
 
   return (
     <div className="agencies-page-container">
+            <Toaster position="top-right" />
       
       {/* Page Header  */}
       <div className="agencies-header">
