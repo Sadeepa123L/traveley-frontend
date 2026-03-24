@@ -47,7 +47,7 @@ export const updatePackage = async (id, formData) => {
         const token = Cookies.get('jwt_token');
         if(!token) throw new Error("NO token found")
 
-            const response = await api.put('tourPackage/update/${id}', formData, {
+            const response = await api.put(`tourPackage/update/${id}`, formData, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'

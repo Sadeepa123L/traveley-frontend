@@ -20,7 +20,6 @@ const TravelerPackages = () => {
         const data = await getActivePackages();
         setPackages(data);
       } catch (error) {
-        console.error("Error fetching packages:", error);
         toast.error("Failed to load tour packages.");
       } finally {
         setIsLoading(false);
