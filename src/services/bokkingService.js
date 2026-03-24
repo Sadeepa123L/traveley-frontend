@@ -37,3 +37,15 @@ export const updateStatus = async (id) => {
     });
     return response.data;
 }
+
+export const getTopPackages = async () => {
+        const token = Cookies.get('jwt_token')
+
+        const response = await api.get('/booking/getTopPackages', {
+
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.data;
+}

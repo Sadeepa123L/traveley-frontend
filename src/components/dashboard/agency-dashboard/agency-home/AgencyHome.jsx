@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaWallet, FaBoxOpen, FaRegCalendarAlt, FaRegComments, FaMapMarkerAlt, FaUsers } from 'react-icons/fa';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import './AgencyHome.css';
-import { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
+
+import {getTopPackages} from '../../../../services/bokkingService';
 
 const AgencyHome = () => {
+  
+  const [topPackages, setTopPackages] = useState([]);
 
   const stats = [
     { id: 1, title: "Total Earnings", value: "$4,250", icon: <FaWallet />, color: "earnings-card" },
@@ -29,26 +33,23 @@ const AgencyHome = () => {
     { id: 3, package: "Sigiriya Sunrise", date: "02", month: "Nov", guests: 6, location: "Sigiriya" },
   ];
 
-  const topPackages = [
-    { 
-      id: 1, 
-      name: "Ella 3-Day Adventure", 
-      bookings: 45, 
-      image: "https://images.unsplash.com/photo-1586222818106-47c627ba1407?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-    },
-    { 
-      id: 2, 
-      name: "Mirissa Whale Watching", 
-      bookings: 38, 
-      image: "https://images.unsplash.com/photo-1598890777032-bdeef3ebe4ea?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-    },
-    { 
-      id: 3, 
-      name: "Galle Fort Heritage Walk", 
-      bookings: 29, 
-      image: "https://images.unsplash.com/photo-1537551080512-faf7ec8beee6?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" 
-    },
-  ];
+  const fetchTopPackages = async () => {
+      try {
+        const data = await getTopPackages();
+        
+        if(Array.isArray(data.data)){
+          setTopPackages(data.data);
+        }else{
+          setTopPackages(data);
+        }
+       } catch (error) {
+        toast.error("Error Loading top Packages")
+       }
+  }
+  useEffect (() => {
+    fetchTopPackages();
+  }, []);
+
 
   return (
     <div className="agency-home-container">
@@ -134,7 +135,7 @@ const AgencyHome = () => {
                 </div>
                 <div className="top-pkg-content">
                   <h4>{pkg.name}</h4>
-                  <p>{pkg.bookings} Total Bookings</p>
+                  <p>{pkg.totalBookings} Total Bookings</p>
                 </div>
               </div>
             ))}
