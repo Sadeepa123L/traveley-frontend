@@ -1,56 +1,54 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaSearch, FaCheck, FaPhoneAlt, FaEnvelope, FaCalendarAlt } from 'react-icons/fa';
 import './AgencyBookings.css';
+import { getAllBookings, updateStatus} from '../../../../services/bokkingService';
+import toast, { Toaster } from 'react-hot-toast';
 
 const AgencyBookings = () => {
-  const [bookings, setBookings] = useState([
-    {
-      id: "BOK-901",
-      travelerName: "Kasun Perera",
-      phone: "+94 77 123 4567",
-      email: "kasun@gmail.com",
-      package: "Ella Adventure Trail",
-      date: "Oct 15, 2026",
-      guests: 2,
-      status: "Pending"
-    },
-    {
-      id: "BOK-902",
-      travelerName: "Sarah Smith",
-      phone: "+44 79 111 2222",
-      email: "sarah.s@yahoo.com",
-      package: "Royal Heritage Tour",
-      date: "Oct 18, 2026",
-      guests: 4,
-      status: "Confirmed"
-    },
-    {
-      id: "BOK-903",
-      travelerName: "Nuwan Silva",
-      phone: "+94 71 987 6543",
-      email: "nuwan.silva@gmail.com",
-      package: "Mirissa Beach Stay",
-      date: "Oct 20, 2026",
-      guests: 2,
-      status: "Pending"
-    }
-  ]);
-
+  const [bookings, setBookings] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleConfirm = (id) => {
-    setBookings(bookings.map(booking => 
-      booking.id === id ? { ...booking, status: "Confirmed" } : booking
-    ));
+const fetchBookings = async () => {
+    try {
+      const data = await getAllBookings();
+      
+      let bookingsArray = [];
+      if (Array.isArray(data)) {
+        bookingsArray = data;
+      } else if (data && Array.isArray(data.data)) {
+        bookingsArray = data.data;
+      }
+      const sortedBookings = bookingsArray.sort((a, b) => b.id - a.id);
+      
+      setBookings(sortedBookings);
+
+    } catch (error) {
+      toast.error("Error loading bookings");
+    }
+  };
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const handleConfirm = async (id) => {
+    try {
+      await updateStatus(id);
+      toast.success("Booking Confirmed!");
+      fetchBookings();
+    } catch (error) {
+      toast.error("Failed to confirm booking");
+    }
   };
 
   const filteredBookings = bookings.filter(booking => 
-    booking.travelerName.toLowerCase().includes(searchTerm.toLowerCase()) || 
-    booking.id.toLowerCase().includes(searchTerm.toLowerCase())
+    booking.travelerName?.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    String(booking.id).toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
     <div className="agency-bookings-container">
+      <Toaster position="top-right" />
       <div className="bookings-page-header">
         <div className="header-text">
           <h1>Booking Inquiries</h1>
@@ -89,27 +87,27 @@ const AgencyBookings = () => {
                 <td className="traveler-details-cell">
                   <h4>{booking.travelerName}</h4>
                   <div className="contact-info">
-                    <span><FaPhoneAlt className="tiny-icon"/> {booking.phone}</span>
-                    <span><FaEnvelope className="tiny-icon"/> {booking.email}</span>
+                    <span><FaPhoneAlt className="tiny-icon"/> {booking.mobileNumber || 'N/A'}</span>
+                    <span><FaEnvelope className="tiny-icon"/> {booking.email || 'N/A'}</span>
                   </div>
                 </td>
                 
                 <td className="package-details-cell">
-                  <h4>{booking.package}</h4>
+                  <h4>{booking.tourPackageName}</h4>
                   <div className="pkg-meta">
-                    <span><FaCalendarAlt className="tiny-icon"/> {booking.date}</span>
-                    <span className="guest-count">Guests: {booking.guests}</span>
+                    <span><FaCalendarAlt className="tiny-icon"/> {booking.travelDate}</span>
+                    <span className="guest-count">Guests: {booking.guestCount}</span>
                   </div>
                 </td>
                 
                 <td>
-                  <span className={`status-badge ${booking.status.toLowerCase()}`}>
+                  <span className={`status-badge ${booking.status?.toLowerCase() || 'pending'}`}>
                     {booking.status}
                   </span>
                 </td>
                 
                 <td className="action-cell">
-                  {booking.status === "Pending" ? (
+                  {booking.status?.toUpperCase() === "PENDING" ? (
                     <button className="confirm-btn" onClick={() => handleConfirm(booking.id)}>
                       <FaCheck /> Confirm
                     </button>
