@@ -3,21 +3,25 @@ import { FaUser, FaArrowRight, FaEnvelope, FaPhone, FaCalendarAlt, FaUsers, FaSu
 import './TravelerBooking.css';
 import toast, { Toaster } from 'react-hot-toast';
 import Select from 'react-select';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 
 import { saveTravelerProfile, getProfile} from '../../../../services/travelerService'; 
 import {getActivePackages} from '../../../../services/tourPackage'
+import {bookTourPackage} from '../../../../services/bokkingService'
 
 const TravelerBooking = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
-    fullName: '', 
+    contactName: '', 
     email: '', 
     phone: '', 
     package: null,
     date: '',
     guests: '',
-    notes: ''
+    notes: '',
+    totalPrice: 0
   });
 
   const [packageOptions, setPackageOptions] = useState([]);
@@ -32,7 +36,6 @@ const TravelerBooking = () => {
     country: ''
   });
 
-  // Packages fetch handler
 useEffect(() => {
     const fetchPackages = async () => {
       try {
@@ -40,7 +43,8 @@ useEffect(() => {
         
         const options = data.map(pkg => ({
           value: pkg.id,
-          label: `${pkg.title} - By ${pkg.agencyProfile?.agencyName || "Trusted Agency"}`
+          label: `${pkg.title} - By ${pkg.agencyProfile?.agencyName || "Trusted Agency"}`,
+          price: pkg.price
         }));
         setPackageOptions(options);
 
@@ -61,8 +65,17 @@ useEffect(() => {
     fetchPackages();
   }, [searchParams]);
 
+  //Total price
+  useEffect(() => {
+  if (formData.package) {
+    const unitPrice = formData.package.price || 0;
+    const guestCount = parseInt(formData.guests) || 1;
+    const total = unitPrice * guestCount;
+    
+    setFormData(prev => ({ ...prev, totalPrice: total }));
+  }
+}, [formData.package, formData.guests]);
 
-  // Profile data fetch handler
   useEffect(() => {
     const fetchProfileStatus = async () => {
       try {
@@ -76,11 +89,11 @@ useEffect(() => {
             mobileNumber:existingProfile.mobileNumber,
             country:existingProfile.country
           });
+          
           setFormData(prevData => ({
             ...prevData,
-            firstName:`${existingProfile.firstName}`,
-            lastName:`${existingProfile.lastName}`,
-            mobileNumber: existingProfile.mobileNumber
+            contactName: `${existingProfile.firstName} ${existingProfile.lastName}`.trim(),
+            phone: existingProfile.mobileNumber
           }));
 
         }
@@ -95,7 +108,6 @@ useEffect(() => {
     fetchProfileStatus();
   }, []);
 
-  // --- 4. Handlers ---
   const handleBookingChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -108,18 +120,16 @@ useEffect(() => {
     setProfileData({ ...profileData, [e.target.name]: e.target.value });
   };
 
-  // Profile data sumbit handler
   const handleProfileSubmit = async (e) => {
     e.preventDefault();
         try {
             const savedData = await saveTravelerProfile(profileData);
             toast.success("Profile saved successfully! Let's book your trip.");
             setHasProfile(true); 
-            fetchProfileStatus();
 
       setFormData({
         ...formData, 
-        fullName: `${savedData.firstName} ${savedData.lastName}`,
+        contactName: `${savedData.firstName} ${savedData.lastName}`.trim(),
         phone: savedData.mobileNumber
       });
       
@@ -129,18 +139,40 @@ useEffect(() => {
     }
   };
 
-  // Booking function handler
-  const handleBookingSubmit = (e) => {
+  //Book Tour Package
+  const handleBookingSubmit = async (e) => {
     e.preventDefault();
     if (!formData.package) {
       toast.error("Please select a package first!");
       return;
     }
-    alert('Booking request sent successfully!');
-  };
+    const payload = {
+      tourPackageId: formData.package.value,
+      travelDate:formData.date,
+
+      bookingDetails: {
+        contactName:formData.contactName,
+        contactNumber:formData.phone,
+        email:formData.email,
+        guestCount:formData.guests,
+        specialRequest:formData.notes
+      }
+    };
+    console.log("PAYLOAD BEING SENT: ", payload);
+  try{
+    const loadingToastId = toast.loading('Sending your booking request...');
+    const response = await bookTourPackage(payload);
+    toast.dismiss(loadingToastId);
+    toast.success(response.message || 'Booking requested successfully!');
+  }catch(error){
+    console.error("Booking error:", error);
+      toast.dismiss();
+      const errorMessage = error.response?.data?.error || "Failed to submit booking. Please try again.";
+      toast.error(errorMessage);
+  }
+};
 
 
-  // React selecter.meka gana tikak blanna mokadd kyala idea ekak ganna
   const customSelectStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -171,12 +203,11 @@ useEffect(() => {
     <div className="booking-page-container">
       <Toaster position="top-right" />
 
-      {/* profile content */}
       {!hasProfile && (
         <div className="profile-setup-overlay">
           <div className="profile-setup-modal">
             <div className="profile-modal-header">
-              <h2>Almost There! ✨</h2>
+              <h2>Almost There!</h2>
               <p>Please complete your traveler profile to secure your bookings.</p>
             </div>
             
@@ -211,7 +242,6 @@ useEffect(() => {
         </div>
       )}
 
-      {/* blur content */}
       <div className={`booking-main-wrapper ${!hasProfile ? 'blurred-content' : ''}`}>
         
         <div className="booking-header">
@@ -219,7 +249,6 @@ useEffect(() => {
           <p>Fill in the details below. We've pre-filled your contact information for a faster booking experience!</p>
         </div>
 
-        {/* Booking content */}
         <div className="booking-content">
           <div className="booking-form-section">
             <form className="modern-booking-form" onSubmit={handleBookingSubmit}>
@@ -240,13 +269,8 @@ useEffect(() => {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label><FaUser className="input-icon" /> First Name</label>
-                  <input type="text" name="firstName" value={formData.firstName} onChange={handleBookingChange} required />
-                </div>
-
-                <div className="form-group">
-                  <label><FaUser className="input-icon" /> Last Name</label>
-                  <input type="text" name="lastName" value={formData.lastName} onChange={handleBookingChange} required />
+                  <label><FaUser className="input-icon" /> Full Name</label>
+                  <input type="text" name="contactName" value={formData.contactName} onChange={handleBookingChange} required />
                 </div>
 
                 <div className="form-group">
@@ -258,7 +282,7 @@ useEffect(() => {
               <div className="form-row">
                 <div className="form-group">
                   <label><FaPhone className="input-icon" /> Phone Number</label>
-                  <input type="tel" name="phone" value={formData.mobileNumber} onChange={handleBookingChange} required />
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleBookingChange} required />
                 </div>
 
                 <div className="form-group">
@@ -266,6 +290,16 @@ useEffect(() => {
                   <input type="number" name="guests" min="1" value={formData.guests} onChange={handleBookingChange} required />
                 </div>
               </div>
+              <div className="form-group">
+                 <label>Total Price (LKR)</label>
+                 <input 
+                   type="text" 
+                    name="totalPrice" 
+                    value={formData.totalPrice} 
+                    readOnly 
+                     style={{ backgroundColor: '#f3f4f6', fontWeight: 'bold', color: '#c87a2c' }}
+                     />
+                 </div>
 
               <div className="form-group">
                 <label><FaCalendarAlt className="input-icon" /> Expected Travel Date</label>

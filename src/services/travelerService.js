@@ -80,3 +80,4 @@ export const getAllProfiles = async () => {
     });
     return response.data;
 }
+
