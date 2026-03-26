@@ -118,7 +118,7 @@
   border: 1px solid #f0f0f0;
 }
 
-.chart-section h2, .sidebar-section h2, .bottom-full-section h2 {
+.chart-section h2, .bottom-full-section h2 {
   font-size: 20px;
   font-weight: 700;
   color: #111;
@@ -132,62 +132,77 @@
   min-width: 100%;  
 }
 
-.upcoming-list {
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.sidebar-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.view-all-text-btn {
+  background: none;
+  border: none;
+  color: #c87a2c;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.view-all-text-btn:hover {
+  opacity: 0.7;
+}
+
+.recent-activity-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  height: calc(100% - 50px);
-  justify-content: center;
+  gap: 20px;
 }
 
-.upcoming-item {
+.activity-item-modern {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 15px;
-  padding-bottom: 15px;
-  border-bottom: 1px solid #f0f0f0;
 }
 
-.upcoming-item:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.activity-bullet {
+  font-size: 10px;
+  margin-top: 5px;
 }
 
-.date-badge {
-  background-color: #fef3c7;
-  color: #d97706;
-  padding: 10px;
-  border-radius: 12px;
-  text-align: center;
-  min-width: 55px;
+.activity-bullet.booking { color: #16a34a; }
+.activity-bullet.payment { color: #0284c7; }
+.activity-bullet.inquiry { color: #d97706; }
+.activity-bullet.review { color: #c87a2c; }
+
+.activity-content-modern p {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
 }
 
-.date-badge span {
-  display: block;
-  font-weight: 800;
-  font-size: 18px;
-}
-
-.date-badge small {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-}
-
-.upcoming-info h4 {
-  margin: 0 0 5px 0;
-  font-size: 15px;
+.activity-content-modern .activity-user {
   font-weight: 600;
   color: #111;
 }
 
-.upcoming-info p {
-  margin: 0;
-  font-size: 13px;
-  color: #666;
-  display: flex;
-  align-items: center;
-  gap: 5px;
+.activity-content-modern .activity-pkg {
+  font-weight: 600;
+  color: #333;
+}
+
+.activity-content-modern small {
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .top-packages-grid {

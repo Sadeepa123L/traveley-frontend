@@ -49,3 +49,15 @@ export const getTopPackages = async () => {
     });
     return response.data;
 }
+export const getWeeklyRevenue = async () => {
+
+        const token = Cookies.get('jwt_token')
+
+        const response = await api.get('/booking/getWeeklyRevenue', {
+
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    });
+    return response.data;
+}

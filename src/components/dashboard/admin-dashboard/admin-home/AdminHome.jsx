@@ -49,6 +49,7 @@ function AdminHome() {
 
   return (
     <div className="admin-home-container">
+      <Toaster position='top-right'/>
       <div className="admin-page-header">
         <h2>Dashboard Overview</h2>
         <p>Welcome back, Super Admin! Here is what's happening today.</p>
