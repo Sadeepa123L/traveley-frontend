@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './AgencyNavBar.css'; 
 
+
 const AgencyNavBar = () => {
   const [pillStyle, setPillStyle] = useState({ left: 0, width: 0, opacity: 0 });
   const menuRef = useRef(null);
@@ -45,6 +46,11 @@ const AgencyNavBar = () => {
     alignPillToActive();
   };
 
+  const handleLogout = () => {
+    document.cookie = "jwt_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    navigate('/login')
+  };
+
   return (
     <nav className="custom-navbar">
       
@@ -68,7 +74,7 @@ const AgencyNavBar = () => {
       </div>
 
       <div className="navbar-actions">
-        <button className="logout-btn" onClick={() => navigate('/login')}>
+        <button className="logout-btn" onClick={handleLogout}>
           Log Out
         </button>
       </div>

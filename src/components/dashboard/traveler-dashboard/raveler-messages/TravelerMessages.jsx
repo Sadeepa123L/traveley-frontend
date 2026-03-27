@@ -158,7 +158,7 @@ const TravelerMessages = () => {
         time: "Just now",
         unread: 0,
         online: false,
-        image: agency.image || "https://via.placeholder.com/150",
+        image: agency.photoUrl || "https://via.placeholder.com/150",
         color: "#8b5cf6"
       };
       setConversations(prev => [newConv, ...prev]);
@@ -181,7 +181,7 @@ const TravelerMessages = () => {
 
   const activeAgencyInfo = allAgencies.find(a => a.id === activeChat?.id);
   const activeDisplayName = activeAgencyInfo ? (activeAgencyInfo.name || activeAgencyInfo.agencyName) : activeChat?.travelerName;
-  const activeImage = activeAgencyInfo?.image || activeChat?.image || "https://via.placeholder.com/150";
+  const activeImage = activeAgencyInfo?.photoUrl || activeChat?.photoUrl || "https://via.placeholder.com/150";
 
   return (
     <div className="messages-page-container">
@@ -227,7 +227,7 @@ const TravelerMessages = () => {
                       onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
                     >
                       <img 
-                        src={agency.image || "https://via.placeholder.com/150"} 
+                        src={agency.photoUrl || "https://via.placeholder.com/150"} 
                         alt="Agency" 
                         style={{ width: '30px', height: '30px', borderRadius: '50%', objectFit: 'cover' }} 
                       />
@@ -249,7 +249,7 @@ const TravelerMessages = () => {
             {conversations.map(chat => {
               const aInfo = allAgencies.find(a => a.id === chat.id);
               const displayName = aInfo ? (aInfo.name || aInfo.agencyName) : chat.travelerName;
-              const displayImg = aInfo?.image || chat.image || "https://via.placeholder.com/150";
+              const displayImg = aInfo?.photoUrl || chat.photoUrl || "https://via.placeholder.com/150";
 
               return (
                 <div 

@@ -1,22 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { FaWallet, FaBoxOpen, FaRegCalendarAlt, FaRegComments, FaMapMarkerAlt, FaUsers, FaCircle } from 'react-icons/fa';
+import { FaWallet, FaBoxOpen, FaRegCalendarAlt, FaRegComments, FaMapMarkerAlt, FaUsers, FaCircle, FaInfoCircle } from 'react-icons/fa';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import './AgencyHome.css';
 import toast, { Toaster } from 'react-hot-toast';
 
-
-import { getTopPackages, getWeeklyRevenue } from '../../../../services/bokkingService';
+import { getTopPackages, getWeeklyRevenue, resentBookings } from '../../../../services/bokkingService';
 
 const AgencyHome = () => {
   
   const [topPackages, setTopPackages] = useState([]);
   const [chartData, setChartData] = useState([]);
-  const [recentBookings, setRecentBookings] = useState([
-    { id: 1, user: "Alex Carter", action: "booked", package: "Ella Train Journey", time: "10 mins ago", type: "booking" },
-    { id: 2, user: "Sarah Smith", action: "booked", package: "Sigiriya Sunrise", time: "2 hours ago", type: "booking" },
-    { id: 3, user: "David John", action: "booked", package: "Kandy Cultural Tour", time: "5 hours ago", type: "booking" },
-    { id: 4, user: "Emma Wilson", action: "booked", package: "Yala Safari", time: "1 day ago", type: "booking" },
-  ]);
+  const [recentBookings, setRecentBookings] = useState([]);
 
   const stats = [
     { id: 1, title: "Total Earnings", value: "$4,250", icon: <FaWallet />, color: "earnings-card" },
@@ -25,32 +19,48 @@ const AgencyHome = () => {
     { id: 4, title: "Unread Messages", value: "5", icon: <FaRegComments />, color: "messages-card" }
   ];
 
+  const isDataEmpty = topPackages.length === 0 && recentBookings.length === 0;
+
+  // Fetch top packages data from the backend
   const fetchTopPackages = async () => {
-      try {
-        const data = await getTopPackages();
-        
-        if(Array.isArray(data.data)){
-          setTopPackages(data.data);
-        }else{
-          setTopPackages(data);
-        }
-       } catch (error) {
-        toast.error("Error Loading top Packages")
-       }
+    try {
+      const data = await getTopPackages();
+      if(Array.isArray(data.data)){
+        setTopPackages(data.data);
+      } else {
+        setTopPackages(data || []);
+      }
+    } catch (error) {
+      toast.error("Error Loading top Packages");
+    }
   }
 
+  // Fetch weekly revenue chart data from the backend
   const fetchWeeklyRevenue = async () => {
     try {
       const data = await getWeeklyRevenue();
       setChartData(data);
+      console.log(data);
     } catch (error) {
       toast.error("Error loading chart data");
     }
   };
 
-  useEffect (() => {
+  // Fetch recent bookings data from the backend
+  const fetchResentPackages = async () => {
+    try {
+      const data = await resentBookings();
+      setRecentBookings(data || []);
+    } catch(error) {
+      toast.error("Error loading Recent bookings");
+    }
+  }
+
+  // Load all initial dashboard data
+  useEffect(() => {
     fetchTopPackages();
     fetchWeeklyRevenue();
+    fetchResentPackages();
   }, []);
 
   return (
@@ -79,6 +89,16 @@ const AgencyHome = () => {
           </div>
         ))}
       </div>
+
+      {isDataEmpty && (
+        <div className="empty-state-banner" style={{ backgroundColor: '#fff3cd', padding: '20px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '25px', border: '1px solid #ffe69c' }}>
+          <FaInfoCircle size={30} color="#856404" />
+          <div>
+            <h3 style={{ margin: '0 0 5px 0', color: '#856404' }}>Complete Your Setup!</h3>
+            <p style={{ margin: '0', color: '#856404' }}>It looks like you don't have any bookings or packages yet. Please make sure your <strong>Agency Profile</strong> is updated and add your first Tour Package to start seeing your stats here.</p>
+          </div>
+        </div>
+      )}
 
       <div className="dashboard-main-content">
         
@@ -120,19 +140,23 @@ const AgencyHome = () => {
             </div>
             
             <div className="recent-activity-list">
-              {recentBookings.map(activity => (
-                <div className="activity-item-modern" key={activity.id}>
-                  <div className={`activity-bullet ${activity.type}`}>
-                    <FaCircle />
+              {recentBookings.length > 0 ? (
+                recentBookings.map(booking => (
+                  <div className="activity-item-modern" key={booking.id}>
+                    <div className="activity-bullet new">
+                      <FaCircle />
+                    </div>
+                    <div className="activity-content-modern">
+                      <p>
+                        <span className="activity-user">{booking.travelerName}</span> booked <span className="activity-pkg">{booking.tourPackageName}</span>
+                      </p>
+                      <small>{booking.travelDate} • {booking.guestCount} Guests • <span style={{fontWeight: 'bold', color: '#c87a2c'}}>${booking.totalPrice}</span></small>
+                    </div>
                   </div>
-                  <div className="activity-content-modern">
-                    <p>
-                      <span className="activity-user">{activity.user}</span> {activity.action} <span className="activity-pkg">{activity.package}</span>
-                    </p>
-                    <small>{activity.time}</small>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <p style={{ textAlign: 'center', color: '#888', marginTop: '20px' }}>No recent bookings found.</p>
+              )}
             </div>
           </div>
         </div>
@@ -140,18 +164,22 @@ const AgencyHome = () => {
         <div className="bottom-full-section">
           <h2>Top Performing Packages</h2>
           <div className="top-packages-grid">
-            {topPackages.map((pkg, index) => (
-              <div className="top-package-card" key={pkg.id}>
-                <div className="pkg-image-wrapper">
-                  <div className="pkg-rank-badge">#{index + 1}</div>
-                  <img src={pkg.image} alt={pkg.name} />
+            {topPackages.length > 0 ? (
+              topPackages.map((pkg, index) => (
+                <div className="top-package-card" key={pkg.id || index}>
+                  <div className="pkg-image-wrapper">
+                    <div className="pkg-rank-badge">#{index + 1}</div>
+                    <img src={pkg.imageUrl || pkg.image} alt={pkg.title || pkg.name} />
+                  </div>
+                  <div className="top-pkg-content">
+                    <h4>{pkg.title || pkg.name}</h4>
+                    <p>{pkg.count || pkg.totalBookings} Total Bookings</p>
+                  </div>
                 </div>
-                <div className="top-pkg-content">
-                  <h4>{pkg.name}</h4>
-                  <p>{pkg.totalBookings} Total Bookings</p>
-                </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p style={{ color: '#888' }}>No top packages to display yet.</p>
+            )}
           </div>
         </div>
 
