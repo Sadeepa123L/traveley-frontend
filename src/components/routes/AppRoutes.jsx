@@ -1,13 +1,13 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import MainLayout from '../layout/MainLayout';
+import MainLayout from '../layout/MainLayout'
 
 import Home from '../landing-page/home/Home';
 import About from '../landing-page/about/About';
 import Services from '../landing-page/services/Services';
 
 import Login from '../login-page/Login';
-import TravelerSignUp from'../signup-page/TravelerSignUp/TravelerSignUp';
+import TravelerSignUp from'../signup-page/TravelerSignUp/TravelerSignUp'
 import AgencySignUp from '../signup-page/AgencySignUp/AgencySignUp'
 
 import TravelerHome from '../dashboard/traveler-dashboard/traveler-home/TravelerHome'
@@ -15,7 +15,7 @@ import TravelerPackages from '../dashboard/traveler-dashboard/traveler-packages/
 import TravelerAgencies from '../dashboard/traveler-dashboard/traveler-agencies/TravelerAgencies'
 import TravelerBooking from '../dashboard/traveler-dashboard/traveler-booking/TravelerBooking'
 import TravelerMessages from '../dashboard/traveler-dashboard/raveler-messages/TravelerMessages'
-import TravelerLayout from '../layout/travelerlayout/Travelerlayout';
+import TravelerLayout from '../layout/travelerlayout/Travelerlayout'
 
 import AgencyLayout from '../layout/agencylayout/Agencylayout'
 import AgencyHome from '../dashboard/agency-dashboard/agency-home/AgencyHome'
