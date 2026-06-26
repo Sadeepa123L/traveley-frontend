@@ -6,7 +6,7 @@ import './AdminLayout.css'
 import NavBar from '../../dashboard/admin-dashboard/admin-navbar/AdminNavBar'
 import SideBar from '../../dashboard/admin-dashboard/admin-sidebar/AdminSideBar'
 
-function TravelerLayout (){
+function AdminLayout (){
     return(
         <div className='admin-layout-container'>
         <SideBar />
@@ -23,4 +23,4 @@ function TravelerLayout (){
 
 }
 
-export default TravelerLayout;
+export default AdminLayout;
