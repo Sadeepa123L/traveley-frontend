@@ -25,7 +25,7 @@ import AgencyMessage from '../dashboard/agency-dashboard/agency-message/AgencyMe
 import AgencySettings from '../dashboard/agency-dashboard/agency-settings/AgencySettings'
 
 
-import AdminLayout from '../layout/adminlayout/Adminlayout'
+import AdminLayout from "../layout/adminlayout/Adminlayout"
 import AdminHome from '../dashboard/admin-dashboard/admin-home/AdminHome'
 import AdminTraveler from '../dashboard/admin-dashboard/admin-traveler/traveler'
 import AdminAgency from '../dashboard/admin-dashboard/admin-agency/agency'
