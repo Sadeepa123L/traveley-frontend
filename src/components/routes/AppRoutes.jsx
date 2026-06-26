@@ -15,9 +15,9 @@ import TravelerPackages from '../dashboard/traveler-dashboard/traveler-packages/
 import TravelerAgencies from '../dashboard/traveler-dashboard/traveler-agencies/TravelerAgencies'
 import TravelerBooking from '../dashboard/traveler-dashboard/traveler-booking/TravelerBooking'
 import TravelerMessages from '../dashboard/traveler-dashboard/raveler-messages/TravelerMessages'
-import TravelerLayout from '../layout/travelerlayout/layout';
+import TravelerLayout from '../layout/travelerlayout/Travelerlayout';
 
-import AgencyLayout from '../layout/agencylayout/layout'
+import AgencyLayout from '../layout/agencylayout/Agencylayout'
 import AgencyHome from '../dashboard/agency-dashboard/agency-home/AgencyHome'
 import AgencyPackage from '../dashboard/agency-dashboard/agency-packages/AgencyPackage'
 import AgencyBookings from '../dashboard/agency-dashboard/agency-bookings/AgencyBookings'
@@ -25,7 +25,7 @@ import AgencyMessage from '../dashboard/agency-dashboard/agency-message/AgencyMe
 import AgencySettings from '../dashboard/agency-dashboard/agency-settings/AgencySettings'
 
 
-import AdminLayout from '../layout/adminlayout/layout'
+import AdminLayout from '../layout/adminlayout/Adminlayout'
 import AdminHome from '../dashboard/admin-dashboard/admin-home/AdminHome'
 import AdminTraveler from '../dashboard/admin-dashboard/admin-traveler/traveler'
 import AdminAgency from '../dashboard/admin-dashboard/admin-agency/agency'
