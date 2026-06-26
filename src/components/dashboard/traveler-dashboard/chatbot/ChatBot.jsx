@@ -50,7 +50,22 @@ const ChatBot = () => {
 
     try {
       const aiResponse = await sendMessageToChatbot(input);
-      setMessages([...newMessages, { text: aiResponse, sender: "bot" }]);
+      
+      if (aiResponse.includes("BOOKING_ACTION|")) {
+        const parts = aiResponse.split("|");
+        const pkg = parts[1];
+        const name = parts[2];
+        const phone = parts[3];
+        
+        setMessages([...newMessages, { 
+          text: "Awesome! I have your details ready. Click the button below to complete your booking.", 
+          sender: "bot",
+          isBookingBtn: true,
+          bookingData: { pkg, name, phone }
+        }]);
+      } else {
+        setMessages([...newMessages, { text: aiResponse, sender: "bot" }]);
+      }
     } catch (error) {
       setMessages([...newMessages, { text: "Connection error. Please try again.", sender: "bot" }]);
     } finally {
@@ -80,11 +95,22 @@ const ChatBot = () => {
             {messages.map((msg, index) => (
               <div key={index} className={`message-container ${msg.sender === 'bot' ? 'bot-align' : 'user-align'}`}>
                 <div className={`message-bubble ${msg.sender === 'bot' ? 'bot-bubble' : 'user-bubble'}`}>
-                  {msg.sender === 'bot' ? (
+                  
+                  {msg.sender === 'bot' && !msg.isBookingBtn ? (
                     <ReactMarkdown>{msg.text}</ReactMarkdown>
                   ) : (
                     msg.text
                   )}
+
+                  {msg.isBookingBtn && (
+                    <a 
+                      href={`/booking?package=${encodeURIComponent(msg.bookingData.pkg)}&name=${encodeURIComponent(msg.bookingData.name)}&phone=${encodeURIComponent(msg.bookingData.phone)}`} 
+                      className="chat-booking-btn"
+                    >
+                      Book {msg.bookingData.pkg} Now
+                    </a>
+                  )}
+
                 </div>
               </div>
             ))}
