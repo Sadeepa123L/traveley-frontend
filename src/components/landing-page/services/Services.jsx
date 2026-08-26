@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import './Services.css';
+import './services.css';
 import { FaSearchLocation, FaMapMarkedAlt, FaUserCheck, FaShieldAlt, FaHeadset, FaHotel } from 'react-icons/fa';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
